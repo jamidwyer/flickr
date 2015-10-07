@@ -637,34 +637,34 @@ function flickr_admin_settings_validate($form, &$form_state) {
   }
   $sec = trim($form_state['values']['flickr_api_secret']);
   if ($sec && (preg_match('/^[A-Fa-f\d]{16}$/', $sec) != 1)) {
-    form_set_error('flickr_api_secret', t('This does not appear to be a Flickr API secret.'));
+    $form_state->setErrorByName('flickr_api_secret', $this->t('This does not appear to be a Flickr API secret.'));
   }
   $uid = trim($form_state['values']['flickr_default_userid']);
   if ($uid) {
     $user = flickr_user_find_by_identifier($uid);
     if (!$user) {
-      form_set_error('flickr_default_userid', t('%uid does not appear to be a valid Flickr user.', array('%uid' => $uid)));
+      $form_state->setErrorByName('flickr_default_userid', $this->t('%uid does not appear to be a valid Flickr user.', array('%uid' => $uid)));
     }
   }
   // Validate the number of photos.
   $limit = trim($form_state['values']['flickr_photos_per_page']);
   if (!ctype_digit($limit) || $limit < 1) {
-    form_set_error('flickr_photos_per_page', t('Set an integer from 1 to 999.'));
+    $form_state->setErrorByName('flickr_photos_per_page', $this->t('Set an integer from 1 to 999.'));
   }
   // Validate the minimum width to suppress title caption.
   $limit = trim($form_state['values']['flickr_title_suppress_on_small']);
   if (!is_numeric($limit) || $limit < 0) {
-    form_set_error('flickr_title_suppress_on_small', t('Set a width from 0 to 999 px.'));
+    $form_state->setErrorByName('flickr_title_suppress_on_small', $this->t('Set a width from 0 to 999 px.'));
   }
   // Validate the minimum width to suppress metadata caption.
   $limit = trim($form_state['values']['flickr_metadata_suppress_on_small']);
   if (!is_numeric($limit) || $limit < 0) {
-    form_set_error('flickr_metadata_suppress_on_small', t('Set a width from 0 to 999 px.'));
+    $form_state->setErrorByName('flickr_metadata_suppress_on_small', $this->t('Set a width from 0 to 999 px.'));
   }
   // Validate the number to return on 'random' or 'views' sorted API requests.
   $limit = trim($form_state['values']['flickr_per_page']);
   if (!ctype_digit($limit) || $limit < 20 || $limit > 500) {
-    form_set_error('flickr_per_page', t('Set an integer from 20 to 500.'));
+    $form_state->setErrorByName('flickr_per_page', $this->t('Set an integer from 20 to 500.'));
   }
 }
 
