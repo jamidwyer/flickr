@@ -1,5 +1,6 @@
 name: Flickr
 description: 'Flickr and Drupal integration.'
+configure: flickr.admin_settings
 core: 8.x
 package: Flickr
 simplytest_dependencies:

@@ -10,6 +10,8 @@ namespace Drupal\flickr\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Component\Utility\String;
+use Drupal\Core\Datetime\Entity\DateFormat;
 
 class FlickrAdminSettings extends ConfigFormBase {
 
@@ -314,11 +316,13 @@ class FlickrAdminSettings extends ConfigFormBase {
       '#weight' => 6,
     ];
     // Get list of all available date formats.
-    drupal_static_reset('system_get_date_types');
     $formats = [];
-    foreach (system_get_date_types() as $f => $format) {
+    $date_types = DateFormat::loadMultiple();
+    $date_formatter = \Drupal::service('date.formatter');
+    foreach ($date_types as $machine_name => $format) {
       // @FIXME
 // // @FIXME
+//      $formats[$machine_name] = t('@name format', array('@name' => $format->label)) . ': ' .$date_formatter->format(REQUEST_TIME, $machine_name);
 // // The correct configuration object could not be determined. You'll need to
 // // rewrite this call manually.
 // if (($format_string = variable_get('date_format_' . $f, FALSE)) === FALSE) {
