@@ -1,0 +1,26 @@
+flickr.admin_settings:
+  path: /admin/config/media/flickr
+  defaults:
+    _title: Flickr
+    _form: \Drupal\flickr\Form\FlickrAdminSettings
+  requirements:
+    _permission: 'administer site configuration'
+flickr.auth_callback:
+  path: /flickr/auth
+  defaults: {  }
+  requirements:
+    _access: 'true'
+flickr.photos:
+  path: /flickr
+  defaults:
+    _title: 'Flickr photos'
+    _controller: '\Drupal\flickr\Controller\DefaultController::flickr_photos'
+  requirements:
+    _access: 'true'
+flickr.user_page:
+  path: '/user/{user}/flickr'
+  defaults:
+    _title: Flickr
+    _controller: '\Drupal\flickr\Controller\DefaultController::flickr_user_page'
+  requirements:
+    _custom_access: '\Drupal\flickr\Controller\DefaultController::flickr_photos_access'

@@ -1,0 +1,16 @@
+name: Flickr
+description: 'Flickr and Drupal integration.'
+core: 8.x
+package: Flickr
+simplytest_dependencies:
+  - style_settings
+  - colorbox
+  - flickr_simplytest
+  - 'libraries (>=2.x)'
+  - colorbox
+soft_dependencies:
+  - style_settings
+version: 8.x-1.0
+project: flickr
+datestamp: '1438860137'
+type: module

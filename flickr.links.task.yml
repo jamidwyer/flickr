@@ -1,0 +1,3 @@
+flickr.user_page:
+  route_name: flickr.user_page
+  title: Flickr

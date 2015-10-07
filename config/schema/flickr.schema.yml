@@ -1,0 +1,84 @@
+flickr.settings:
+  type: mapping
+  label: Settings
+  mapping:
+    flickr_preview_collapsed:
+      type: boolean
+    flickr_api_key:
+      type: 'NULL'
+    flickr_api_secret:
+      type: string
+    flickr_default_userid:
+      type: string
+    flickr_photos_per_page:
+      type: integer
+    flickr_default_size_album:
+      type: string
+    flickr_title_suppress_on_small:
+      type: string
+    flickr_metadata_suppress_on_small:
+      type: string
+    flickr_regex:
+      type: string
+    flickr_license:
+      type: integer
+    flickr_restrict:
+      type: integer
+    flickr_extend:
+      type: integer
+    flickr_maps:
+      type: integer
+    flickr_counter:
+      type: integer
+    flickr_thousands_sep:
+      type: string
+    flickr_date_format_image_title:
+      type: string
+    flickr_date_format_image_caption:
+      type: string
+    flickr_date_format_image_caption_hover:
+      type: string
+    flickr_date_format_album_title:
+      type: string
+    flickr_class:
+      type: string
+    flickr_rel:
+      type: string
+    flickr_opening_size:
+      type: string
+    flickr_css:
+      type: integer
+    flickr_capsize_value:
+      type: integer
+    flickr_capsize_unit:
+      type: string
+    flickr_sswidth_value:
+      type: string
+    flickr_sswidth_unit:
+      type: string
+    flickr_sswratio:
+      type: integer
+    flickr_sshratio:
+      type: integer
+    flickr_cache_duration:
+      type: integer
+    flickr_per_page:
+      type: integer
+    flickr_curl:
+      type: integer
+    flickr_curl2:
+      type: integer
+    flickr_debug:
+      type: integer
+    flickr_smart:
+      type: integer
+    flickr_cc:
+      type: integer
+    flickr_sets_per_page:
+      type: integer
+    flickr_block_hide_empty:
+      type: integer
+    flickr_block_refresh_random:
+      type: integer
+    flickr_block_refresh_others:
+      type: integer

@@ -1,0 +1,170 @@
+<?php
+/**
+ * @file
+ * The Flickr database schema and uninstall hook.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function flickr_install() {
+  if (\Drupal::moduleHandler()->moduleExists('colorbox')) {
+    \Drupal::configFactory()->getEditable('flickr.settings')->set('flickr_class', 'colorbox')->save();
+    \Drupal::configFactory()->getEditable('flickr.settings')->set('flickr_rel', 'gallery-all')->save();
+    // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// variable_set('colorbox_inline', 1);
+
+  }
+  elseif (\Drupal::moduleHandler()->moduleExists('lightbox2')) {
+    \Drupal::configFactory()->getEditable('flickr.settings')->set('flickr_rel', 'lightbox[gallery]')->save();
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function flickr_uninstall() {
+  \Drupal::config('flickr.settings')->clear('flickr_api_key')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_api_secret')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_cache_duration')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_cc')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_class')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_css')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_curl')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_curl2')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_debug')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_default_size_album')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_default_userid')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_opening_size')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_per_page')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_photos_per_page')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_rel')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_title_suppress_on_small')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_metadata_suppress_on_small')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_info_overlay')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_license')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_restrict')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_extend')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_counter')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_maps')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_geophp')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_smart')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_date_format_image_title')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_date_format_image_caption')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_date_format_image_caption_hover')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_date_format_album_title')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_capsize')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_sswidth_value')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_sswidth_unit')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_sswidth')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_sswratio')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_sshratio')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_ssratio')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_caption_fontsize')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_preview_html')->save();
+  \Drupal::config('flickr.settings')->clear('flickr_preview_collapsed')->save();
+}
+
+/**
+ * Implements hook_schema().
+ */
+function flickr_schema() {
+  $schema['flickr_users'] = array(
+    'description' => 'Connects Drupal users to their Flickr accounts.',
+    'fields' => array(
+      'uid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Drupal user ID',
+      ),
+      'nsid' => array(
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+        'description' => 'Flickr NSID',
+      ),
+      'identifier' => array(
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+        'description' => 'Flickr identifier',
+      ),
+    ),
+    'primary key' => array('uid'),
+  );
+  return $schema;
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function flickr_requirements($phase) {
+  if ($phase == 'runtime') {
+    $requirements = array();
+    $t = 't';
+    // @FIXME
+// l() expects a Url object, created from a route name or external URI.
+// $requirements['flickr_requirements'] = array(
+//       'title' => $t('Flickr'),
+//       'value' => variable_get('flickr_api_key', NULL) ? $t('A Flickr API key has been set.') : $t("No Flickr API key has been set at !link.", array('!link' => l('admin/config/media/flickr', 'admin/config/media/flickr'))),
+//       'severity' => variable_get('flickr_api_key', NULL) ? REQUIREMENT_OK : REQUIREMENT_ERROR,
+//     );
+
+    return $requirements;
+  }
+}
+
+/**
+ * Create new index 'license' on the variable 'flickr_info_overlay'.
+ */
+function flickr_update_7001() {
+  // @FIXME
+// Could not extract the default value because it is either indeterminate, or
+// not scalar. You'll need to provide a default value in
+// config/install/flickr.settings.yml and config/schema/flickr.schema.yml.
+$overlay = \Drupal::config('flickr.settings')->get('flickr_info_overlay');
+  if (!isset($overlay['license'])) {
+    \Drupal::configFactory()->getEditable('flickr.settings')->set('flickr_info_overlay', array(
+      'title' => 'title',
+      'metadata' => 'metadata',
+      'description' => 'description',
+      'license' => 0,
+    ))->save();
+  }
+}
+
+/**
+ * Removes old unused variables.
+ */
+function flickr_update_7101() {
+  \Drupal::config('flickr.settings')->clear("flickr_default_size")->save();
+}
+
+/**
+ * Enable 'Colorbox inline' to allow playing videos inside Colorbox.
+ */
+function flickr_update_7102() {
+  if (\Drupal::moduleHandler()->moduleExists('colorbox')) {
+    \Drupal::configFactory()->getEditable('flickr.settings')->set('flickr_class', 'colorbox')->save();
+    \Drupal::configFactory()->getEditable('flickr.settings')->set('flickr_rel', 'gallery-all')->save();
+    // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// variable_set('colorbox_inline', 1);
+
+  }
+  elseif (\Drupal::moduleHandler()->moduleExists('lightbox2')) {
+    \Drupal::configFactory()->getEditable('flickr.settings')->set('flickr_rel', 'lightbox[gallery]')->save();
+  }
+}
+
+/**
+ * Delete unused variables.
+ */
+function flickr_update_7103() {
+  \Drupal::config('flickr.settings')->clear('flickr_caption_padding')->save();
+}

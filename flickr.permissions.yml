@@ -1,0 +1,8 @@
+'view own flickr photos':
+  title: 'View Flickr photos on own user profile and specify Flickr ID on own account'
+  description: 'Needed to add a Flickr identifier to own account. This is used for example by the ''Node author'' Flickr blocks.'
+'view all flickr photos':
+  title: 'View Flickr photos on user profiles'
+  description: 'Consider giving ''View user profiles'' permission also, in combination with this one.'
+'administer flickr':
+  title: 'Administer Flickr settings'
