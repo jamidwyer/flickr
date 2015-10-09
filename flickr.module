@@ -252,13 +252,13 @@ $nsid = \Drupal::config('flickr.settings')->get('flickr_default_userid');
  * Implements hook_user_load().
  * Adds the Flickr variables to the user object.
  */
-function flickr_user_load($users) {
+/*function flickr_user_load($users) {
   $result = db_query('SELECT * FROM {flickr_users} WHERE uid IN (:uids)', array(':uids' => array_keys($users)));
   foreach ($result as $record) {
     $users[$record->uid]->flickr['identifier'] = $record->identifier;
     $users[$record->uid]->flickr['nsid'] = $record->nsid;
   }
-}
+}*/
 
 /**
  * Implements hook_user_presave().
