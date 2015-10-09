@@ -1,0 +1,10 @@
+name: 'Flickr Filter'
+description: 'A text filter to insert Flickr photos and sets into content.'
+core: 8.x
+package: Flickr
+dependencies:
+  - flickr
+version: 7.x-1.8
+project: flickr
+datestamp: '1438860137'
+type: module

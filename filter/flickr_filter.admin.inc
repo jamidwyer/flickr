@@ -9,12 +9,7 @@
  */
 function flickr_filter_form_flickr_admin_settings_alter(&$form, &$form_state) {
   $form['#validate'][] = 'flickr_filter_admin_settings_validate';
-  $autofloat_module = l(t('AutoFloat module'), 'https://drupal.org/project/autofloat', array(
-      'attributes' => array(
-        'title' => t('AutoFloat | Drupal.org'),
-        'target' => '_blank',
-      ),
-  ));
+  $autofloat_module = \Drupal::l(t('AutoFloat module'), \Drupal\Core\Url::fromUri('https://drupal.org/project/autofloat'));
   $form['filter_settings'] = array(
     '#type' => 'fieldset',
     '#title' => t('Filter options'),
@@ -26,7 +21,7 @@ function flickr_filter_form_flickr_admin_settings_alter(&$form, &$form_state) {
   $form['filter_settings']['flickr_filter_default_size'] = array(
     '#type' => 'select',
     '#title' => t('Default size for single photos'),
-    '#default_value' => variable_get('flickr_filter_default_size', 'm'),
+    '#default_value' => \Drupal::config('flickr_filter.settings')->get('flickr_filter_default_size'),
     '#options' => array(
       's' => t('s: 75 px square'),
       't' => t('t: 100 px on longest side'),
@@ -44,7 +39,7 @@ function flickr_filter_form_flickr_admin_settings_alter(&$form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Wrap the album title in an HTML heading tag (only for the text filter)'),
     '#required' => TRUE,
-    '#default_value' => variable_get('flickr_filter_heading', 'p'),
+    '#default_value' => \Drupal::config('flickr_filter.settings')->get('flickr_filter_heading'),
     '#description' => t("Use 'p' for no style, e.g. 'h3' for a heading or 'none' to not display an album title."),
     '#field_prefix' => t('<'),
     '#field_suffix' => t('>'),
@@ -56,7 +51,7 @@ function flickr_filter_form_flickr_admin_settings_alter(&$form, &$form_state) {
     $form['filter_settings']['flickr_filter_collapsible'] = array(
       '#type' => 'checkbox',
       '#title' => t("Collapsible filter tips (collapsed by default)"),
-      '#default_value' => variable_get('flickr_filter_collapsible', 1),
+      '#default_value' => \Drupal::config('flickr_filter.settings')->get('flickr_filter_collapsible'),
       '#description' => t('Collapse the in-line help for the Flickr Filter text format under the body field on node edit forms.'),
     );
   }
