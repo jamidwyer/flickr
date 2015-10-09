@@ -349,11 +349,11 @@ function flickr_block_configure($delta = '') {
       );
     }
   }
-  if (module_exists('geofield') || module_exists('location_node')) {
+  if (\Drupal::moduleHandler()->moduleExists('geofield') || \Drupal::moduleHandler()->moduleExists('location_node')) {
     // Get a list of existing geofields.
     $fields = field_read_fields(array('type' => 'geofield'));
     $checklist_fields_array = array('0' => '<none>');
-    if (module_exists('location_node')) {
+    if (\Drupal::moduleHandler()->moduleExists('location_node')) {
       $checklist_fields_array = array('0' => '<none>', '1' => 'Location module');
     }
     foreach ($fields as $item) {
@@ -370,7 +370,7 @@ function flickr_block_configure($delta = '') {
       '#description'   => t("Limit the Flickr images to those that have a geo location near to the geofield found for the node on the page the block is displayed on.<br />If not on a node page, all photos will be displayed. To avoid this set the visibility settings below to <em>Only the listed pages</em> specified as <em>node/*</em>."),
     );
   }
-  if (module_exists('date')) {
+  if (\Drupal::moduleHandler()->moduleExists('date')) {
     // Get a list of existing date ields.
     $fields = field_read_fields(array('type' => 'datetime'));
     $checklist_fields_array = array('0' => '<none>');
@@ -403,18 +403,18 @@ function flickr_block_configure($delta = '') {
       unset($form["flickr_block_{$delta}_photoset"]);
       unset($form['filter_settings']["flickr_block_{$delta}_sort"]);
       unset($form['filter_settings']["flickr_block_{$delta}_filter"]);
-      if (module_exists('taxonomy')) {
+      if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
         unset($form['filter_settings']["flickr_block_{$delta}_vocab"]);
         unset($form['filter_settings']["flickr_block_{$delta}_extend"]);
         unset($form['filter_settings']["flickr_block_{$delta}_tag_mode"]);
       }
-      if (module_exists('geofield') || module_exists('location_node')) {
+      if (\Drupal::moduleHandler()->moduleExists('geofield') || \Drupal::moduleHandler()->moduleExists('location_node')) {
         unset($form['filter_settings']["flickr_block_{$delta}_geo"]);
       }
-      if (module_exists('date')) {
+      if (\Drupal::moduleHandler()->moduleExists('date')) {
         unset($form['filter_settings']["flickr_block_{$delta}_date"]);
       }
-      if (module_exists('date')) {
+      if (\Drupal::moduleHandler()->moduleExists('date')) {
         unset($form['filter_settings']["flickr_block_{$delta}_date"]);
       }
       // Photoset, not photos.
@@ -440,13 +440,13 @@ function flickr_block_configure($delta = '') {
       unset($form["flickr_block_{$delta}_group_id"]);
       unset($form["flickr_block_{$delta}_photoset"]);
       unset($form['filter_settings']["flickr_block_{$delta}_filter"]);
-      if (module_exists('taxonomy')) {
+      if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
         unset($form['filter_settings']["flickr_block_{$delta}_tag_mode"]);
       }
-      if (module_exists('geofield') || module_exists('location_node')) {
+      if (\Drupal::moduleHandler()->moduleExists('geofield') || \Drupal::moduleHandler()->moduleExists('location_node')) {
         unset($form['filter_settings']["flickr_block_{$delta}_geo"]);
       }
-      if (module_exists('date')) {
+      if (\Drupal::moduleHandler()->moduleExists('date')) {
         unset($form['filter_settings']["flickr_block_{$delta}_date"]);
       }
       break;
@@ -478,13 +478,13 @@ function flickr_block_configure($delta = '') {
       unset($form["flickr_block_{$delta}_photoset"]);
       unset($form['flickr_block_note']);
       unset($form['filter_settings']["flickr_block_{$delta}_filter"]);
-      if (module_exists('taxonomy')) {
+      if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
         unset($form['filter_settings']["flickr_block_{$delta}_tag_mode"]);
       }
-      if (module_exists('geofield') || module_exists('location_node')) {
+      if (\Drupal::moduleHandler()->moduleExists('geofield') || \Drupal::moduleHandler()->moduleExists('location_node')) {
         unset($form['filter_settings']["flickr_block_{$delta}_geo"]);
       }
-      if (module_exists('date')) {
+      if (\Drupal::moduleHandler()->moduleExists('date')) {
         unset($form['filter_settings']["flickr_block_{$delta}_date"]);
       }
       break;
@@ -496,15 +496,15 @@ function flickr_block_configure($delta = '') {
       unset($form['flickr_block_note']);
       unset($form['filter_settings']["flickr_block_{$delta}_sort"]);
       unset($form['filter_settings']["flickr_block_{$delta}_filter"]);
-      if (module_exists('taxonomy')) {
+      if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
         unset($form['filter_settings']["flickr_block_{$delta}_vocab"]);
         unset($form['filter_settings']["flickr_block_{$delta}_extend"]);
         unset($form['filter_settings']["flickr_block_{$delta}_tag_mode"]);
       }
-      if (module_exists('geofield') || module_exists('location_node')) {
+      if (\Drupal::moduleHandler()->moduleExists('geofield') || \Drupal::moduleHandler()->moduleExists('location_node')) {
         unset($form['filter_settings']["flickr_block_{$delta}_geo"]);
       }
-      if (module_exists('date')) {
+      if (\Drupal::moduleHandler()->moduleExists('date')) {
         unset($form['filter_settings']["flickr_block_{$delta}_date"]);
       }
       // Photosets, not photos.
@@ -536,13 +536,13 @@ function flickr_block_configure($delta = '') {
       unset($form["flickr_block_{$delta}_group_id"]);
       unset($form['flickr_block_note']);
       unset($form['filter_settings']["flickr_block_{$delta}_filter"]);
-      if (module_exists('taxonomy')) {
+      if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
         unset($form['filter_settings']["flickr_block_{$delta}_tag_mode"]);
       }
-      if (module_exists('geofield') || module_exists('location_node')) {
+      if (\Drupal::moduleHandler()->moduleExists('geofield') || \Drupal::moduleHandler()->moduleExists('location_node')) {
         unset($form['filter_settings']["flickr_block_{$delta}_geo"]);
       }
-      if (module_exists('date')) {
+      if (\Drupal::moduleHandler()->moduleExists('date')) {
         unset($form['filter_settings']["flickr_block_{$delta}_date"]);
       }
       break;
@@ -552,13 +552,13 @@ function flickr_block_configure($delta = '') {
       unset($form["flickr_block_{$delta}_group_id"]);
       unset($form["flickr_block_{$delta}_photoset"]);
       unset($form['flickr_block_note']);
-      if (module_exists('taxonomy')) {
+      if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
         unset($form['filter_settings']["flickr_block_{$delta}_vocab"]);
       }
-      if (module_exists('geofield') || module_exists('location_node')) {
+      if (\Drupal::moduleHandler()->moduleExists('geofield') || \Drupal::moduleHandler()->moduleExists('location_node')) {
         unset($form['filter_settings']["flickr_block_{$delta}_geo"]);
       }
-      if (module_exists('date')) {
+      if (\Drupal::moduleHandler()->moduleExists('date')) {
         unset($form['filter_settings']["flickr_block_{$delta}_date"]);
       }
       if (empty($default_userid)) {
@@ -645,16 +645,16 @@ function flickr_block_save($delta = '', $edit = array()) {
     // User Flickr photos.
     case 0:
     case 2:
-      $vocab = module_exists('taxonomy') ? (int) $edit["flickr_block_{$delta}_vocab"] : 0;
-      $extend = module_exists('taxonomy') ? $edit["flickr_block_{$delta}_extend"] : 0;
-      if (module_exists('taxonomy')) {
+      $vocab = \Drupal::moduleHandler()->moduleExists('taxonomy') ? (int) $edit["flickr_block_{$delta}_vocab"] : 0;
+      $extend = \Drupal::moduleHandler()->moduleExists('taxonomy') ? $edit["flickr_block_{$delta}_extend"] : 0;
+      if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
         $tag_mode = $extend ? 'any' : $edit["flickr_block_{$delta}_tag_mode"];
       }
       else {
         $tag_mode = 'context';
       }
-      $geo = module_exists('geofield') || module_exists('location_node') ? $edit["flickr_block_{$delta}_geo"] : 0;
-      $date = module_exists('date') ? $edit["flickr_block_{$delta}_date"] : 0;
+      $geo = \Drupal::moduleHandler()->moduleExists('geofield') || \Drupal::moduleHandler()->moduleExists('location_node') ? $edit["flickr_block_{$delta}_geo"] : 0;
+      $date = \Drupal::moduleHandler()->moduleExists('date') ? $edit["flickr_block_{$delta}_date"] : 0;
       variable_set('flickr_block_' . $delta, array(
         'show_n' => (int) $edit["flickr_block_{$delta}_show_n"],
         'size' => $edit["flickr_block_{$delta}_size"],
@@ -676,9 +676,9 @@ function flickr_block_save($delta = '', $edit = array()) {
     case 14:
     case 15:
     case 16:
-      $vocab = module_exists('taxonomy') ? (int) $edit["flickr_block_{$delta}_vocab"] : 0;
-      $extend = module_exists('taxonomy') ? $edit["flickr_block_{$delta}_extend"] : 0;
-      if (module_exists('taxonomy')) {
+      $vocab = \Drupal::moduleHandler()->moduleExists('taxonomy') ? (int) $edit["flickr_block_{$delta}_vocab"] : 0;
+      $extend = \Drupal::moduleHandler()->moduleExists('taxonomy') ? $edit["flickr_block_{$delta}_extend"] : 0;
+      if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
         $tag_mode = $extend ? 'any' : $edit["flickr_block_{$delta}_tag_mode"];
       }
       else {
@@ -715,16 +715,16 @@ function flickr_block_save($delta = '', $edit = array()) {
 
         }
       }
-      $vocab = module_exists('taxonomy') ? (int) $edit["flickr_block_{$delta}_vocab"] : 0;
-      $extend = module_exists('taxonomy') ? $edit["flickr_block_{$delta}_extend"] : 0;
-      if (module_exists('taxonomy')) {
+      $vocab = \Drupal::moduleHandler()->moduleExists('taxonomy') ? (int) $edit["flickr_block_{$delta}_vocab"] : 0;
+      $extend = \Drupal::moduleHandler()->moduleExists('taxonomy') ? $edit["flickr_block_{$delta}_extend"] : 0;
+      if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
         $tag_mode = $extend ? 'any' : $edit["flickr_block_{$delta}_tag_mode"];
       }
       else {
         $tag_mode = 'context';
       }
-      $geo = module_exists('geofield') || module_exists('location_node') ? $edit["flickr_block_{$delta}_geo"] : 0;
-      $date = module_exists('date') ? $edit["flickr_block_{$delta}_date"] : 0;
+      $geo = \Drupal::moduleHandler()->moduleExists('geofield') || \Drupal::moduleHandler()->moduleExists('location_node') ? $edit["flickr_block_{$delta}_geo"] : 0;
+      $date = \Drupal::moduleHandler()->moduleExists('date') ? $edit["flickr_block_{$delta}_date"] : 0;
       variable_set('flickr_block_' . $delta, array(
         'user_id' => $edit["flickr_block_{$delta}_user_id"],
         'show_n' => (int) $edit["flickr_block_{$delta}_show_n"],
@@ -761,9 +761,9 @@ function flickr_block_save($delta = '', $edit = array()) {
 
         }
       }
-      $vocab = module_exists('taxonomy') ? (int) $edit["flickr_block_{$delta}_vocab"] : 0;
-      $extend = module_exists('taxonomy') ? $edit["flickr_block_{$delta}_extend"] : 0;
-      if (module_exists('taxonomy')) {
+      $vocab = \Drupal::moduleHandler()->moduleExists('taxonomy') ? (int) $edit["flickr_block_{$delta}_vocab"] : 0;
+      $extend = \Drupal::moduleHandler()->moduleExists('taxonomy') ? $edit["flickr_block_{$delta}_extend"] : 0;
+      if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
         $tag_mode = $extend ? 'any' : $edit["flickr_block_{$delta}_tag_mode"];
       }
       else {
@@ -816,16 +816,16 @@ function flickr_block_save($delta = '', $edit = array()) {
     // Photos from a Flickr group.
     case 6:
     case 10:
-      $vocab = module_exists('taxonomy') ? (int) $edit["flickr_block_{$delta}_vocab"] : 0;
-      $extend = module_exists('taxonomy') ? $edit["flickr_block_{$delta}_extend"] : 0;
-      if (module_exists('taxonomy')) {
+      $vocab = \Drupal::moduleHandler()->moduleExists('taxonomy') ? (int) $edit["flickr_block_{$delta}_vocab"] : 0;
+      $extend = \Drupal::moduleHandler()->moduleExists('taxonomy') ? $edit["flickr_block_{$delta}_extend"] : 0;
+      if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
         $tag_mode = $extend ? 'any' : $edit["flickr_block_{$delta}_tag_mode"];
       }
       else {
         $tag_mode = 'context';
       }
-      $geo = module_exists('geofield') || module_exists('location_node') ? $edit["flickr_block_{$delta}_geo"] : 0;
-      $date = module_exists('date') ? $edit["flickr_block_{$delta}_date"] : 0;
+      $geo = \Drupal::moduleHandler()->moduleExists('geofield') || \Drupal::moduleHandler()->moduleExists('location_node') ? $edit["flickr_block_{$delta}_geo"] : 0;
+      $date = \Drupal::moduleHandler()->moduleExists('date') ? $edit["flickr_block_{$delta}_date"] : 0;
       variable_set('flickr_block_' . $delta, array(
         'group_id' => $edit["flickr_block_{$delta}_group_id"],
         'show_n' => (int) $edit["flickr_block_{$delta}_show_n"],
@@ -847,9 +847,9 @@ function flickr_block_save($delta = '', $edit = array()) {
     // Photos from a Flickr photoset.
     case 7:
     case 8:
-      $vocab = module_exists('taxonomy') ? (int) $edit["flickr_block_{$delta}_vocab"] : 0;
-      $extend = module_exists('taxonomy') ? $edit["flickr_block_{$delta}_extend"] : 0;
-      if (module_exists('taxonomy')) {
+      $vocab = \Drupal::moduleHandler()->moduleExists('taxonomy') ? (int) $edit["flickr_block_{$delta}_vocab"] : 0;
+      $extend = \Drupal::moduleHandler()->moduleExists('taxonomy') ? $edit["flickr_block_{$delta}_extend"] : 0;
+      if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
         $tag_mode = $extend ? 'any' : $edit["flickr_block_{$delta}_tag_mode"];
       }
       else {
@@ -873,8 +873,8 @@ function flickr_block_save($delta = '', $edit = array()) {
     // Random photos with a specific tag from a Flickr user.
     case 11:
       $userid = $edit["flickr_block_{$delta}_user_id"];
-      $extend = module_exists('taxonomy') ? $edit["flickr_block_{$delta}_extend"] : 0;
-      if (module_exists('taxonomy')) {
+      $extend = \Drupal::moduleHandler()->moduleExists('taxonomy') ? $edit["flickr_block_{$delta}_extend"] : 0;
+      if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
         $tag_mode = $extend ? 'any' : $edit["flickr_block_{$delta}_tag_mode"];
       }
       if (!empty($userid) && $userid != 'public') {
@@ -1026,12 +1026,12 @@ function flickr_block_view($delta = '') {
             }
             $tags = 'from_user_page';
             // To display photos near a user on their profile.
-            if (module_exists('geofield') && !is_numeric($settings['geo']) && !empty($settings['geo'])) {
+            if (\Drupal::moduleHandler()->moduleExists('geofield') && !is_numeric($settings['geo']) && !empty($settings['geo'])) {
               $value = field_get_items('user', $user, $settings['geo']);
               $lat = $value[0]['lat'];
               $lon = $value[0]['lon'];
             }
-            elseif (module_exists('location_node') && $settings['geo'] == 1 && !empty($user->locations)) {
+            elseif (\Drupal::moduleHandler()->moduleExists('location_node') && $settings['geo'] == 1 && !empty($user->locations)) {
               $lat = $user->locations[0]['latitude'];
               $lon = $user->locations[0]['longitude'];
             }
@@ -1101,12 +1101,12 @@ function flickr_block_view($delta = '') {
               $tags_user = '';
               $tags = '';
             }
-            if (module_exists('geofield') && !is_numeric($settings['geo']) && !empty($settings['geo'])) {
+            if (\Drupal::moduleHandler()->moduleExists('geofield') && !is_numeric($settings['geo']) && !empty($settings['geo'])) {
               $value = field_get_items('node', $node, $settings['geo']);
               $lat = $value[0]['lat'];
               $lon = $value[0]['lon'];
             }
-            elseif (module_exists('location_node') && $settings['geo'] == 1 && !empty($node->locations)) {
+            elseif (\Drupal::moduleHandler()->moduleExists('location_node') && $settings['geo'] == 1 && !empty($node->locations)) {
               $lat = $node->locations[0]['latitude'];
               $lon = $node->locations[0]['longitude'];
             }
@@ -1114,7 +1114,7 @@ function flickr_block_view($delta = '') {
               $lat = NULL;
               $lon = NULL;
             }
-            if (module_exists('date') && !is_numeric($settings['date']) && !empty($settings['date'])) {
+            if (\Drupal::moduleHandler()->moduleExists('date') && !is_numeric($settings['date']) && !empty($settings['date'])) {
               $value = field_get_items('node', $node, $settings['date']);
               $datefrom = substr($value[0]['value'], 0, strrpos($value[0]['value'], ' '));
               $dateto = substr($value[0]['value2'], 0, strrpos($value[0]['value2'], ' '));
@@ -1223,12 +1223,12 @@ function flickr_block_view($delta = '') {
         else {
           $tags = '';
         }
-        if (module_exists('geofield') && !is_numeric($settings['geo']) && !empty($settings['geo'])) {
+        if (\Drupal::moduleHandler()->moduleExists('geofield') && !is_numeric($settings['geo']) && !empty($settings['geo'])) {
           $value = field_get_items('node', $node, $settings['geo']);
           $lat = $value[0]['lat'];
           $lon = $value[0]['lon'];
         }
-        elseif (module_exists('location_node') && $settings['geo'] == 1 && !empty($node->locations)) {
+        elseif (\Drupal::moduleHandler()->moduleExists('location_node') && $settings['geo'] == 1 && !empty($node->locations)) {
           $lat = $node->locations[0]['latitude'];
           $lon = $node->locations[0]['longitude'];
         }
@@ -1236,7 +1236,7 @@ function flickr_block_view($delta = '') {
           $lat = NULL;
           $lon = NULL;
         }
-        if (module_exists('date') && !is_numeric($settings['date']) && !empty($settings['date'])) {
+        if (\Drupal::moduleHandler()->moduleExists('date') && !is_numeric($settings['date']) && !empty($settings['date'])) {
           $value = field_get_items('node', $node, $settings['date']);
           $datefrom = substr($value[0]['value'], 0, strrpos($value[0]['value'], ' '));
           $dateto = substr($value[0]['value2'], 0, strrpos($value[0]['value2'], ' '));
@@ -1306,12 +1306,12 @@ function flickr_block_view($delta = '') {
         else {
           $tags = '';
         }
-        if (module_exists('geofield') && !is_numeric($settings['geo']) && !empty($settings['geo'])) {
+        if (\Drupal::moduleHandler()->moduleExists('geofield') && !is_numeric($settings['geo']) && !empty($settings['geo'])) {
           $value = field_get_items('node', $node, $settings['geo']);
           $lat = $value[0]['lat'];
           $lon = $value[0]['lon'];
         }
-        elseif (module_exists('location_node') && $settings['geo'] == 1 && !empty($node->locations)) {
+        elseif (\Drupal::moduleHandler()->moduleExists('location_node') && $settings['geo'] == 1 && !empty($node->locations)) {
           $lat = $node->locations[0]['latitude'];
           $lon = $node->locations[0]['longitude'];
         }
@@ -1319,7 +1319,7 @@ function flickr_block_view($delta = '') {
           $lat = NULL;
           $lon = NULL;
         }
-        if (module_exists('date') && !is_numeric($settings['date']) && !empty($settings['date'])) {
+        if (\Drupal::moduleHandler()->moduleExists('date') && !is_numeric($settings['date']) && !empty($settings['date'])) {
           $value = field_get_items('node', $node, $settings['date']);
           $datefrom = substr($value[0]['value'], 0, strrpos($value[0]['value'], ' '));
           $dateto = substr($value[0]['value2'], 0, strrpos($value[0]['value2'], ' '));

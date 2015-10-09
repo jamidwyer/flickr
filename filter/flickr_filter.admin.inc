@@ -52,7 +52,7 @@ function flickr_filter_form_flickr_admin_settings_alter(&$form, &$form_state) {
     '#maxlength' => 4,
   );
   // Offer the following setting if the ctools module is enabled.
-  if (module_exists('ctools')) {
+  if (\Drupal::moduleHandler()->moduleExists('ctools')) {
     $form['filter_settings']['flickr_filter_collapsible'] = array(
       '#type' => 'checkbox',
       '#title' => t("Collapsible filter tips (collapsed by default)"),

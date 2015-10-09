@@ -773,20 +773,20 @@ $overlay = \Drupal::config('flickr.settings')->get('flickr_info_overlay');
 // // @FIXME
 // // This looks like another module's variable. You'll need to rewrite this call
 // // to ensure that it uses the correct configuration object.
-// $uri = module_exists('style_settings') ? variable_get('flickrstyle_magnifier_image', '') : '';
+// $uri = \Drupal::moduleHandler()->moduleExists('style_settings') ? variable_get('flickrstyle_magnifier_image', '') : '';
 
     $magnifierurl = empty($uri) ? '/' . drupal_get_path('module', 'flickr') . '/style/img/magnifier.png' : $uri;
     // @FIXME
 // // @FIXME
 // // This looks like another module's variable. You'll need to rewrite this call
 // // to ensure that it uses the correct configuration object.
-// $iconsize = module_exists('style_settings') ? variable_get('flickrstyle_magnifier_size', '50px') : '50px';
+// $iconsize = \Drupal::moduleHandler()->moduleExists('style_settings') ? variable_get('flickrstyle_magnifier_size', '50px') : '50px';
 
     // @FIXME
 // // @FIXME
 // // This looks like another module's variable. You'll need to rewrite this call
 // // to ensure that it uses the correct configuration object.
-// $magnifier = variable_get('flickrstyle_emphasize', 2) == 4 && module_exists('flickrstyle') ? '<span class="hover-icon"><img src="' . $magnifierurl . '" style="width:' . $iconsize . ';height:' . $iconsize . ';"></span>' : '';
+// $magnifier = variable_get('flickrstyle_emphasize', 2) == 4 && \Drupal::moduleHandler()->moduleExists('flickrstyle') ? '<span class="hover-icon"><img src="' . $magnifierurl . '" style="width:' . $iconsize . ';height:' . $iconsize . ';"></span>' : '';
 
   }
   else {
@@ -839,7 +839,7 @@ if (\Drupal::config('flickr.settings')->get('flickr_class') == NULL && \Drupal::
 // // @FIXME
 // // This looks like another module's variable. You'll need to rewrite this call
 // // to ensure that it uses the correct configuration object.
-// if ($photo['media'] == 'video' && module_exists('colorbox') && variable_get('colorbox_inline', 0) == 1) {
+// if ($photo['media'] == 'video' && \Drupal::moduleHandler()->moduleExists('colorbox') && variable_get('colorbox_inline', 0) == 1) {
 //       // @FIXME
 // // l() expects a Url object, created from a route name or external URI.
 // // return '<div style="display: none;">

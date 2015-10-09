@@ -9,7 +9,7 @@
  */
 function flickr_filter_install() {
   // For the preview in the settings form we need Colorbox also on admin pages.
-  if (module_exists('colorbox')) {
+  if (\Drupal::moduleHandler()->moduleExists('colorbox')) {
     $pages = variable_get('colorbox_pages', "admin*\nimagebrowser*\nimg_assist*\nimce*\nnode/add/*\nnode/*/edit\nprint/*\nprintpdf/*\nsystem/ajax\nsystem/ajax/*");
     variable_set('colorbox_pages', str_replace("admin*", "", $pages));
   }

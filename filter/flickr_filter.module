@@ -158,7 +158,7 @@ function flickr_filter_tips($filter, $format, $long = FALSE) {
     'content' => $output,
     'collapsed' => TRUE,
   );
-  $output = module_exists('ctools') && variable_get('flickr_filter_collapsible', 1) ? theme('ctools_collapsible', $options) : $output;
+  $output = \Drupal::moduleHandler()->moduleExists('ctools') && variable_get('flickr_filter_collapsible', 1) ? theme('ctools_collapsible', $options) : $output;
   return $output;
 }
 
