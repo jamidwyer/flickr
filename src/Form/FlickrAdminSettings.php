@@ -84,7 +84,7 @@ class FlickrAdminSettings extends ConfigFormBase {
         'format' => 'full_html',
       ])->save() : $markup;
       // Use the current user's default format if the stored one isn't available.
-      $format_id = filter_format_load($markup['format']) ? $markup['format'] : filter_default_format();
+//      $format_id = filter_format_load($markup['format']) ? $markup['format'] : filter_default_format();
       $form['flickr_preview']['flickr_preview_markup'] = [
         '#markup' => '<div class="flickr-preview">' . check_markup($markup['value'], $format_id, '', $cache = FALSE) . '</div>'
         ];
