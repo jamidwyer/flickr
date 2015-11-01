@@ -1,11 +1,65 @@
 <?php
+
 /**
  * @file
- * The Flickr module.
+ * Flickr module.
  */
 
+use Drupal\Component\Utility\Crypt;
+use Drupal\Core\Site\Settings;
+
 // Load flickr.inc from the flickr module.
+//TODO: this is being called three times
 module_load_include('inc', 'flickr');
+
+/**
+ * Access callback for Flickr submodule menu items.
+ */
+function flickr_apikey_ready_access($permission) {
+  if (flickr_get_api_object() && \Drupal::currentUser()->hasPermission($permission)) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+
+/**
+ * Instantiates a Flickr library object.
+ *
+ * @return \Drupal\flickr\DrupalFlickr
+ *   Drupal Flickr library object.
+ */
+function flickr_get_api_object() {
+  $flickr = &drupal_static(__FUNCTION__);
+
+  if (isset($flickr)) {
+    return $flickr;
+  }
+
+  $config = \Drupal::config('flickr.settings');
+
+  // We allow the class name to be overridden, following the example of core's
+  // mailsystem, in order to use alternate Flickr classes. The bundled tests
+  // use this approach to extend the Flickr class with a test server.
+  $classname = $config->get('api_classname');
+
+  if (!class_exists($classname) && ($classname != 'Drupal\flickr_test\DrupalFlickr')) {
+    $msg = t('Failed to load Flickr PHP library. Please refer to the installation requirements.');
+    \Drupal::logger('flickr')->error($msg);
+    drupal_set_message($msg, 'error');
+    return NULL;
+  }
+
+  $api_key = $config->get('api_key');
+  if (!strlen($api_key)) {
+    \Drupal::logger('flickr')->error('Flickr Error: API Key cannot be blank.');
+    return NULL;
+  }
+
+  $flickr = new $classname($api_key);
+
+  return $flickr;
+}
 
 /**
  * Implements hook_help().
