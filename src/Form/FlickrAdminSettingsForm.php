@@ -116,7 +116,7 @@ class FlickrAdminSettingsForm extends ConfigFormBase {
       '#weight' => 2,
     ];
 
-    $form['credentials']['flickr_api_secret'] = [
+    $form['flickr_api_secret'] = [
       '#type' => 'textfield',
       '#title' => t('API Shared Secret'),
       '#required' => TRUE,
