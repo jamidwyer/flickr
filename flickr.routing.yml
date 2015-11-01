@@ -2,7 +2,7 @@ flickr.admin_settings:
   path: /admin/config/media/flickr
   defaults:
     _title: Flickr
-    _form: \Drupal\flickr\Form\FlickrAdminSettings
+    _form: \Drupal\flickr\Form\FlickrAdminSettingsForm
   requirements:
     _permission: 'administer site configuration'
 flickr.auth_callback:

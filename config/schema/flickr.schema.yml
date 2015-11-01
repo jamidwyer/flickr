@@ -6,6 +6,7 @@ flickr.settings:
       type: boolean
     flickr_api_key:
       type: 'NULL'
+      label: 'Flickr API Integration Key'
     flickr_api_secret:
       type: string
     flickr_default_userid:

@@ -5,8 +5,8 @@
  * Flickr module.
  */
 
-use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Site\Settings;
+use Drupal\Component\Utility\Crypt;
 
 // Load flickr.inc from the flickr module.
 //TODO: this is being called three times
@@ -50,7 +50,7 @@ function flickr_get_api_object() {
     return NULL;
   }
 
-  $api_key = $config->get('api_key');
+  $api_key = $config->get('flickr_api_key');
   if (!strlen($api_key)) {
     \Drupal::logger('flickr')->error('Flickr Error: API Key cannot be blank.');
     return NULL;
