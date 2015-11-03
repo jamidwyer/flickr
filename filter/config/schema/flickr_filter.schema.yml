@@ -1,0 +1,10 @@
+flickr_filter.settings:
+  type: mapping
+  label: Settings
+  mapping:
+    flickr_filter_default_size:
+      type: string
+    flickr_filter_heading:
+      type: string
+    flickr_filter_collapsible:
+      type: integer

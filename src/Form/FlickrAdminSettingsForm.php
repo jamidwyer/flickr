@@ -9,11 +9,12 @@ namespace Drupal\flickr\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\Core\Render\Element;
 use Drupal\Component\Utility\String;
 use Drupal\Core\Datetime\Entity\DateFormat;
 
-class FlickrAdminSettings extends ConfigFormBase {
+class FlickrAdminSettingsForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
@@ -25,34 +26,29 @@ class FlickrAdminSettings extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->config('flickr.settings');
-
-    foreach (Element::children($form) as $variable) {
-      $config->set($variable, $form_state->getValue($form[$variable]['#parents']));
-    }
-    $config->save();
-
-    if (method_exists($this, '_submitForm')) {
-      $this->_submitForm($form, $form_state);
-    }
-
-    parent::submitForm($form, $form_state);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function getEditableConfigNames() {
     return ['flickr.settings'];
   }
 
   public function buildForm(array $form, \Drupal\Core\Form\FormStateInterface $form_state) {
-    // @FIXME
+    $config = $this->config('flickr.settings');
+
+    $apply = \Drupal::l(t('https://www.flickr.com/services/apps/create/apply'), \Drupal\Core\Url::fromUri('https://www.flickr.com/services/apps/create/apply'));
+    $form['flickr_api_key'] = [
+      '#type' => 'textfield',
+      '#title' => t('Flickr API Key'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('flickr_api_key'),
+      '#description' => t("API Key from Flickr. Get an API Key at !apply.", [
+        '!apply' => $apply
+      ]),
+    ];
+
+        // @FIXME
 // The Assets API has totally changed. CSS, JavaScript, and libraries are now
 // attached directly to render arrays using the #attached property.
-// 
-// 
+//
+//
 // @see https://www.drupal.org/node/2169605
 // @see https://www.drupal.org/node/2408597
 // drupal_add_css(drupal_get_path('module', 'flickr') . '/flickr_cc_icons.css', array(
@@ -84,10 +80,11 @@ class FlickrAdminSettings extends ConfigFormBase {
         'format' => 'full_html',
       ])->save() : $markup;
       // Use the current user's default format if the stored one isn't available.
-      $format_id = filter_format_load($markup['format']) ? $markup['format'] : filter_default_format();
+      //TODO: this is wiping anything the user has entered
+      $format_id = filter_default_format();
       $form['flickr_preview']['flickr_preview_markup'] = [
         '#markup' => '<div class="flickr-preview">' . check_markup($markup['value'], $format_id, '', $cache = FALSE) . '</div>'
-        ];
+      ];
       $form['flickr_preview']['flickr_preview_details'] = [
         '#type' => 'fieldset',
         '#title' => t('Template'),
@@ -108,8 +105,8 @@ class FlickrAdminSettings extends ConfigFormBase {
       $form['flickr_preview']['flickr_note_preview'] = [
         '#markup' => t("Enable the !flickr_filter_module to have an editable preview template available to see the effect of your settings changes instantly without closing the form.", [
           '!flickr_filter_module' => $flickr_filter_module
-          ])
-        ];
+        ])
+      ];
     }
     $form['credentials'] = [
       '#type' => 'fieldset',
@@ -118,17 +115,8 @@ class FlickrAdminSettings extends ConfigFormBase {
       '#collapsed' => TRUE,
       '#weight' => 2,
     ];
-    $apply = \Drupal::l(t('https://www.flickr.com/services/apps/create/apply'), \Drupal\Core\Url::fromUri('https://www.flickr.com/services/apps/create/apply'));
-    $form['credentials']['flickr_api_key'] = [
-      '#type' => 'textfield',
-      '#title' => t('API Key'),
-      '#required' => TRUE,
-      '#default_value' => \Drupal::config('flickr.settings')->get('flickr_api_key'),
-      '#description' => t("API Key from Flickr. Get an API Key at !apply.", [
-        '!apply' => $apply
-        ]),
-    ];
-    $form['credentials']['flickr_api_secret'] = [
+
+    $form['flickr_api_secret'] = [
       '#type' => 'textfield',
       '#title' => t('API Shared Secret'),
       '#required' => TRUE,
@@ -147,7 +135,7 @@ class FlickrAdminSettings extends ConfigFormBase {
       '#description' => t('An optional default Flickr user (number@number, alias, username or email). This will be used when no user is specified.'),
     ];
     // We need an api key before we can verify usernames.
-    if (!$form['credentials']['flickr_api_key']['#default_value']) {
+    if (!$form['flickr_api_key']['#default_value']) {
       $form['credentials']['flickr_default_userid']['#disabled'] = TRUE;
       $form['credentials']['flickr_default_userid']['#description'] .= ' ' . t('Disabled until a valid API Key is set.');
     }
@@ -201,8 +189,8 @@ class FlickrAdminSettings extends ConfigFormBase {
       '#attributes' => [
         'class' => [
           'flickr-form-align'
-          ]
-        ],
+        ]
+      ],
     ];
     $form['info_settings']['flickr_metadata_suppress_on_small'] = [
       '#type' => 'textfield',
@@ -211,15 +199,15 @@ class FlickrAdminSettings extends ConfigFormBase {
       '#default_value' => \Drupal::config('flickr.settings')->get('flickr_metadata_suppress_on_small'),
       '#description' => t("Suppress extra info on small images. Set it to '0 px' to always include or '999 px' to always exclude. To give !attribution this should be included (space allowing). Clear the cache on form submit.", [
         '!attribution' => $attribution
-        ]),
+      ]),
       '#field_suffix' => t('px'),
       '#size' => 3,
       '#maxlength' => 3,
       '#attributes' => [
         'class' => [
           'flickr-form-align'
-          ]
-        ],
+        ]
+      ],
     ];
     $rubular = \Drupal::l(t('http://rubular.com/r/RhKjj9Thy1'), \Drupal\Core\Url::fromUri('http://rubular.com/r/RhKjj9Thy1'));
 
@@ -229,7 +217,7 @@ class FlickrAdminSettings extends ConfigFormBase {
       '#default_value' => \Drupal::config('flickr.settings')->get('flickr_regex'),
       '#description' => t("Avoids camera generated titles like 'IMG_4259'. Try your own RegEx first with !rubular. Leave empty to NOT replace any titles.", [
         '!rubular' => $rubular
-        ]),
+      ]),
       '#field_prefix' => t('/'),
       '#field_suffix' => t('/'),
       '#size' => 60,
@@ -380,7 +368,7 @@ class FlickrAdminSettings extends ConfigFormBase {
       '#title' => t('Overlay browser (Colorbox, Lightbox)'),
       '#description' => t('Recommended is the !colorbox_module. Leave empty to link directly to the Flickr photo page instead of opening the bigger version of the image.', [
         '!colorbox_module' => $colorbox_module
-        ]),
+      ]),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
       '#weight' => 8,
@@ -423,7 +411,7 @@ class FlickrAdminSettings extends ConfigFormBase {
       '#default_value' => \Drupal::config('flickr.settings')->get('flickr_info_overlay'),
       '#description' => t("To give !attribution all marked * should be checked. Clear the cache on form submit.", [
         '!attribution' => $attribution
-        ]),
+      ]),
       '#options' => [
         'title' => t('Title *'),
         'metadata' => t('Date, location and photographer *'),
@@ -445,7 +433,7 @@ class FlickrAdminSettings extends ConfigFormBase {
       '#default_value' => \Drupal::config('flickr.settings')->get('flickr_css'),
       '#description' => t("Uncheck to take care of the styling yourself in custom CSS. If you use Flickr Filter, you might find the !autofloat_module useful.", [
         '!autofloat_module' => $autofloat_module
-        ]),
+      ]),
     ];
     $form['css_settings']['css_variables'] = [
       '#type' => 'fieldset',
@@ -461,11 +449,11 @@ class FlickrAdminSettings extends ConfigFormBase {
         '#title' => t('Caption font-size'),
         '#description' => t('Relative to the font size for the normal text. A minimum font size setting of your browser might limit it. Test it on different browsers.'),
         // Make containing fields align horizontally.
-      '#attributes' => [
+        '#attributes' => [
           'class' => [
             'container-inline'
-            ]
-          ],
+          ]
+        ],
       ];
       // Number field without a '#field_suffix'.
       $form['css_settings']['css_variables']['flickr_capsize']['flickr_capsize_value'] = [
@@ -488,11 +476,11 @@ class FlickrAdminSettings extends ConfigFormBase {
         '#title' => t('Slideshow width'),
         '#description' => t('Relative to width of the containing block element (%) or fixed (px). Never wider than the containing block (max-width: 100 %).'),
         // Make containing fields align horizontally.
-      '#attributes' => [
+        '#attributes' => [
           'class' => [
             'container-inline'
-            ]
-          ],
+          ]
+        ],
       ];
       // Number field without a '#field_suffix'.
       $form['css_settings']['css_variables']['flickr_sswidth']['flickr_sswidth_value'] = [
@@ -513,11 +501,11 @@ class FlickrAdminSettings extends ConfigFormBase {
         '#type' => 'fieldset',
         '#title' => t('Slideshow width:height ratio'),
         // Make containing fields align horizontally.
-      '#attributes' => [
+        '#attributes' => [
           'class' => [
             'container-inline'
-            ]
-          ],
+          ]
+        ],
       ];
       // Number field without a '#field_suffix'.
       $form['css_settings']['css_variables']['flickr_ssratio']['flickr_sswratio'] = [
@@ -545,8 +533,8 @@ class FlickrAdminSettings extends ConfigFormBase {
           <li>the slideshow width/height ratio</li>
         </ul>", [
           '!style_settings_module' => $style_settings_module
-          ])
-        ];
+        ])
+      ];
     }
     else {
       $form['css_settings']['css_variables']['flickr_note'] = [
@@ -557,14 +545,14 @@ class FlickrAdminSettings extends ConfigFormBase {
           <li>customized rounded corners, shadow, border and scale properties</li>
         </ul>", [
           '!style_settings_module' => $style_settings_module
-          ])
-        ];
+        ])
+      ];
     }
     $flickr_style = \Drupal::l(t('Flickr Style'), \Drupal\Core\Url::fromRoute('system.modules_list'));
     if (!\Drupal::moduleHandler()->moduleExists('flickrstyle')) {
       $form['css_settings']['flickr_style'] = [
         '#markup' => '<p>' . t("Extend the styling options with rounded corners, shadow, border and emphasize on hover by enabling the !flickr_style sub-module.", [
-          '!flickr_style' => $flickr_style
+            '!flickr_style' => $flickr_style
           ]) . '</p>',
         '#weight' => -1,
       ];
@@ -605,7 +593,7 @@ class FlickrAdminSettings extends ConfigFormBase {
       '#default_value' => \Drupal::config('flickr.settings')->get('flickr_per_page'),
       '#description' => t('Setting a lower number enhances performance but makes random results being less spread between one another (not less random) and returns popular (most viewed on Flickr) only from the <em>n</em> most recent.<br />Minimum 20, maximum 500. Set the maximum only if you use !cache_warming.', [
         '!cache_warming' => $cache_warming
-        ]),
+      ]),
       '#size' => 3,
       '#maxlength' => 3,
     ];
@@ -616,7 +604,7 @@ class FlickrAdminSettings extends ConfigFormBase {
       '#default_value' => \Drupal::config('flickr.settings')->get('flickr_curl'),
       '#description' => t("Your server configuration now uses 'fopen' for external resources (used by 'getimagesize'). 'cURL' might be faster. !more_info.", [
         '!more_info' => $more_info
-        ]),
+      ]),
     ];
     $form['advanced_settings']['flickr_curl2'] = [
       '#type' => 'checkbox',
@@ -649,7 +637,7 @@ class FlickrAdminSettings extends ConfigFormBase {
         \Drupal::configFactory()->getEditable('flickr.settings')->set('flickr_debug', 1)->save();
         drupal_set_message(t("The debug output has been set to 'Flickr response only'. 'Plus Devel' has been disabled until you enable the !devel_module.", [
           '!devel_module' => $devel_module
-          ]), 'warning', FALSE);
+        ]), 'warning', FALSE);
       }
     }
     $form['advanced_settings']['flickr_debug'] = [
@@ -662,7 +650,7 @@ class FlickrAdminSettings extends ConfigFormBase {
       ],
       '#description' => t('Display the Flickr XML response, all passed photo/album arguments and HTTP requests/response objects via the !devel_module.', [
         '!devel_module' => $devel_module
-        ]),
+      ]),
       '#default_value' => \Drupal::config('flickr.settings')->get('flickr_debug'),
     ];
     // Disable the Devel output until it is available.
@@ -698,17 +686,17 @@ class FlickrAdminSettings extends ConfigFormBase {
       $form['block_settings']['flickr_smart']['#disabled'] = TRUE;
       $form['block_settings']['flickr_smart']['#title'] = '<span class="grayed-out">' . t("Smart install of Flickr Block") . '</span> | ' . t('Disabled until uninstall of Flickr Block.');
       $form['block_settings']['flickr_smart']['#description'] = '<span class="grayed-out">' . t("On install of Flickr Block auto create Flickr taxonomy, date and geo fields on all node types to grab Flickr photos related to the node on the same page as a Flickr block based on tags, a date or a location. Enable Taxonomy (core), !date (including date_popup) and !geofield before enabling Flickr Block for the first time (or uninstall it first).", [
-        '!date' => $date,
-        '!geofield' => $geofield,
-      ]) . '</span>';
+          '!date' => $date,
+          '!geofield' => $geofield,
+        ]) . '</span>';
     }
     $flickr_block = \Drupal::l(t('Flickr Block'), \Drupal\Core\Url::fromRoute('system.modules_list'));
     if (!\Drupal::moduleHandler()->moduleExists('flickr_block')) {
       $form['block_settings']['flickr_block'] = [
         '#markup' => t("Display Flickr photos in blocks by enabling the !flickr_block sub-module.", [
           '!flickr_style' => $flickr_style
-          ])
-        ];
+        ])
+      ];
     }
     $form['flickr_cc'] = [
       '#type' => 'checkbox',
@@ -725,6 +713,24 @@ class FlickrAdminSettings extends ConfigFormBase {
     $form['#submit'][] = 'flickr_admin_settings_submit';
 
     return parent::buildForm($form, $form_state);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    $config = $this->config('flickr.settings');
+
+    foreach (Element::children($form) as $variable) {
+      $config->set($variable, $form_state->getValue($form[$variable]['#parents']));
+    }
+    $config->save();
+
+    if (method_exists($this, '_submitForm')) {
+      $this->_submitForm($form, $form_state);
+    }
+
+    parent::submitForm($form, $form_state);
   }
 
   public function validateForm(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {

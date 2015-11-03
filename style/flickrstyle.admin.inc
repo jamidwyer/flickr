@@ -33,7 +33,7 @@ function flickrstyle_form_flickr_admin_settings_alter(&$form, &$form_state) {
       'shadow' => 'shadow',
       'border' => 'border',
     ));
-    if (module_exists('style_settings')) {
+    if (\Drupal::moduleHandler()->moduleExists('style_settings')) {
       $form['css_settings']['css_variables']['flickrstyle_radius'] = array(
         '#type' => 'fieldset',
         '#title' => t('Rounded corner radius'),
@@ -265,7 +265,7 @@ function flickrstyle_form_flickr_admin_settings_alter(&$form, &$form_state) {
  * Submit form data.
  */
 function flickrstyle_admin_settings_submit($form, &$form_state) {
-  if (variable_get('flickr_css', 1) && module_exists('style_settings')) {
+  if (variable_get('flickr_css', 1) && \Drupal::moduleHandler()->moduleExists('style_settings')) {
     // Rounded corners: concatenate the value and unit.
     variable_set('flickrstyle_radius', $form_state['values']['flickrstyle_radius_value'] . $form_state['values']['flickrstyle_radius_unit']);
 

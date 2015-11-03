@@ -36,129 +36,158 @@ function flickr_filter_info() {
  * Returns the filter information for the filter help page.
  */
 function flickr_filter_tips($filter, $format, $long = FALSE) {
-  $autofloat = l(t('AutoFloat module'), 'https://drupal.org/project/autofloat/', array(
-    'attributes' => array(
-      'title' => t('AutoFloat | Drupal.org'),
-      'target' => '_blank',
-    ),
-  ));
-  $idgettr = l(t('Find a Flickr group ID.'), 'http://idgettr.com/', array(
-    'attributes' => array(
-      'title' => t('Use the URL of your group to find the Flickr ID.'),
-      'target' => '_blank',
-    ),
-  ));
-  $config = l(t('set in config'), 'admin/config/media/flickr/', array(
-    'attributes' => array(
-      'title' => t('Go to Flickr configuration page'),
-    ),
-  ));
-  $dateformats = l(t('accepted date formats'), 'http://php.net/manual/en/datetime.formats.date.php/', array(
-    'attributes' => array(
-      'title' => t('PHP: Date Formats - Manual'),
-      'target' => '_blank',
-    ),
-  ));
-  $relativeformats = l(t('relative formats'), 'http://php.net/manual/en/datetime.formats.relative.php/', array(
-    'attributes' => array(
-      'title' => t('PHP: Relative Formats - Manual'),
-      'target' => '_blank',
-    ),
-  ));
-  $count = variable_get('flickr_counter', 1) ? 'true' : 'false';
-  $extend = variable_get('flickr_extend', 1) ? 'true' : 'false';
-  $default_userid = variable_get('flickr_default_userid', '');
-  $info = empty($default_userid) ? '' : flickr_people_getinfo(variable_get('flickr_default_userid', ''));
+  $autofloat = \Drupal::l(t('AutoFloat module'), \Drupal\Core\Url::fromUri('https://drupal.org/project/autofloat/'));
+  $idgettr = \Drupal::l(t('Find a Flickr group ID.'), \Drupal\Core\Url::fromUri('http://idgettr.com/'));
+  // @FIXME
+// l() expects a Url object, created from a route name or external URI.
+// $config = l(t('set in config'), 'admin/config/media/flickr/', array(
+//     'attributes' => array(
+//       'title' => t('Go to Flickr configuration page'),
+//     ),
+//   ));
+
+  $dateformats = \Drupal::l(t('accepted date formats'), \Drupal\Core\Url::fromUri('http://php.net/manual/en/datetime.formats.date.php/'));
+  $relativeformats = \Drupal::l(t('relative formats'), \Drupal\Core\Url::fromUri('http://php.net/manual/en/datetime.formats.relative.php/'));
+  // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $count = variable_get('flickr_counter', 1) ? 'true' : 'false';
+
+  // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $extend = variable_get('flickr_extend', 1) ? 'true' : 'false';
+
+  // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $default_userid = variable_get('flickr_default_userid', '');
+
+  // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $info = empty($default_userid) ? '' : flickr_people_getinfo(variable_get('flickr_default_userid', ''));
+
   $default_userid = empty($info) ? '[undefined]' : $info['username']['_content'];
-  $output = t("Insert a <strong>Flickr photo</strong>. A working example:
-  <ul>
-    <li>[flickr-<strong>photo</strong>:id=7357144724, size=m, mintitle=999, minmetadata=999] (accepts only the parameters <em>id, class, style, size, mintitle</em> and <em>minmetadata</em>)</li>
-  </ul>
-  To float single photos use [flickr-photo:id=9247386562, <strong>class=\"floatright\"</strong>], [flickr-photo:id=9247388074, <strong>style=\"float:left;\"</strong>] or use the !autofloat (recommended).<br /><br />
-  Insert a <strong>Flickr album</strong>. Working examples:
-  <ul>
-    <li>[flickr-<strong>photoset</strong>:id=72157634563269642, size=s, num=8, tags=kids/men, media=all, sort=random, count=false, mintitle=999, minmetadata=999, heading=none]</li>
-    <li>[flickr-<strong>gallery</strong>:id=72157648989290536, size=q, num=4, sort=views]</li>
-    <li>[flickr-<strong>group</strong>:id=91484156@N00, size=q, num=8, tags=flowers, media=all, sort=random, count=false, mintitle=999, minmetadata=999, heading=none]</li>
-    <li>[flickr-<strong>user</strong>:id=lolandese1, size=q, num=6, tags=kids/men, media=all, sort=random, count=false, mintitle=999, minmetadata=999, heading=none]</li>
-    <li>[flickr-<strong>user</strong>:id=public, size=q, num=10,tags=Augusto Canario, filter=interesting, sort=views, extend=true]</li>
-    <li>[flickr-<strong>user</strong>:id=public, size=q, num=8,location=48.867556/2.364088, date=2015-01-11, filter=interesting, sort=views]</li>
-    <li>[flickr-<strong>favorites</strong>:id=lolandese, size=q, num=4, tags=tomosborn/people, media=all, sort=random, count=false, mintitle=999, minmetadata=999, heading=none]</li>
-  </ul><br />
-  Common sizes:<br />
-  <table style='width:100%'>
-    <tr>
-      <td>
-        s : small square 75<br />
-        t : thumbnail, 100 on longest side<br />
-        q : big square 150
-      </td>
-      <td>
-        m : small, 240 on longest side<br />
-        n : small, 320 on longest side<br />
-        - : medium, 500 on longest side
-      </td>
-      <td>
-        x: Responsive slideshow (for group, set and user IDs only)<br />
-        y: Basic responsive slideshow (for set and user IDs only)
-      </td>
-    </tr>
-  </table>
-  The 'c' size (800px) is missing on Flickr images uploaded before March 1, 2012. Photos with non existing sizes will be skipped in albums.<br /><br />
-  <strong>TIP</strong>: Not only the node body but also blocks make use of a text format. Build your own custom Flickr album block using the Flickr Filter syntax.<br /><br />
-  <strong>PARAMETER EXAMPLES</strong>. Omitting a parameter will result in the default value to be used.<br />
-  <strong>id=lolandese1</strong> : A photo, set, user or group ID. <strong>id=public</strong> grabs CC licensed public photos (only for <em>[flickr-user:...]</em>). <strong>Default: id=@default_userid</strong> (!config).<br />&nbsp;&nbsp;!find_id Valid ID values: numeric ID (the one that contains a '@'), path alias, Flickr username or the user's email.<br />
-  <strong>class=\"floatleft foo bar\"</strong> : Syntax as in HTML. Wrap the value in quotes (or not) and put spaces between multiple classes.<br />&nbsp;&nbsp;Applies to the outer HTML element of a photo or album.<br />
-  <strong>style=\"float:left; border:solid 2px;\"</strong> : Syntax as in HTML. Wrap the value in quotes (or not) and put semicolons between different style declarations.<br />&nbsp;&nbsp;Applies to the outer HTML element of a photo or album.<br />
-  <strong>size=q</strong> : Big square (150px). The sizes x and y display a slideshow and ignore number, media, tags, location and sort settings.<br />&nbsp;&nbsp;<strong>Default single photo: size=@default_size, album photo: size=@default_size_album</strong> (both !config).<br />
-  <strong>num=4</strong> : Display 4 photos. <strong>Default: num=@default_number</strong> (!config). For albums only.<br />&nbsp;&nbsp;If set to 1, the single image will behave as such. Heading and counter will be omitted, and float might apply.<br />&nbsp;&nbsp;Used to display a single changing random or recent image.<br />
-  <strong>media=all</strong> : Display both photos and videos. <strong>Default: media=photos</strong>. For albums only.<br />
-  <strong>tags=kids/men</strong> : <strong>Separate multiple tags with a slash (/).</strong> Display all set, group or user photos that contain the indicated tags.<br />&nbsp;&nbsp;Case insensitive, matches any tag, for photosets and galleries even partial. You can exclude results that match a term by prepending it with a - character.<br />&nbsp;&nbsp;Public albums will only display photos that match all tags. Like on Flickr spaces are removed from tags (e.g. 'Victoria park' becomes 'victoriapark').<br />&nbsp;&nbsp;For albums only.<br />
-  <strong>extend=true</strong> : Extend the tag filter to search for matching terms also in the Flickr photo title and description besides Flickr tags.<br />&nbsp;&nbsp;<strong>Default: extend=@default_extend</strong> (!config). For albums only.<br />
-  <strong>tag_mode=all</strong> : Matches 'all' defined tags (AND). The other possible value is 'any' (OR).<br />&nbsp;&nbsp;If this parameter is omitted, 'all' is used if no Flickr user ID is known (public search), otherwise 'any' is used. For albums only.<br />
-  <strong>location=48.85837/2.294481/0.2</strong> : Display photos within 200 mt from the Eiffel Tower. Lat/lon/radius (in km). Separate values with a slash (/).<br />&nbsp;&nbsp;To get the coordinates for a location, right-click on a Google map and choose 'What's here?' or copy/paste it from the URL.<br />&nbsp;&nbsp;Substitute the comma (,) with a slash (/). Optionally add a radius to force a major number of results to filter on (max. 32 km).<br />&nbsp;&nbsp;If the radius is omitted it defaults to 14 meter and gradually expands to 32 km until a sufficient number of results are returned.<br />&nbsp;&nbsp;Besides decimal coordinates also degrees are accepted, e.g. 2° 21' 50.72\". For user and group albums only, also public.<br />
-  <strong>date=2015-01-11</strong> : Display photos taken on 11 January 2015.<br />&nbsp;&nbsp;Many !dateformats (e.g. '11 Jan 2015'), also !relativeformats (e.g. 'first day of last month | last day of last month').<br />&nbsp;&nbsp;Separate two date values with a vertical bar (|) to cover a timespan of multiple days. For user and group albums only, also public.<br />&nbsp;&nbsp;<strong>Tip</strong>: Use a date in combination with a location to grab public photos of an event.<br />
-  <strong>heading=h3</strong> : Wraps the album title in HTML tags. Use 'p' to apply no style or 'none' to suppress the title. <strong>Default heading=@default_heading</strong> (!config). For albums only.<br />
-  <strong>sort=views</strong> : Display the most viewed Flickr photos first (popularity, slower response after cache clear).<br />&nbsp;&nbsp;Other values: <em>unsorted</em> = recent as delivered by the Flickr API (fastest response),<br />&nbsp;&nbsp;<em>random</em> (slower response after cache clear), <em>taken</em> (newest first), <em>posted</em> (newest first) , <em>added</em> (for groups only, newest first) and <em>id</em> (on photo ID, newest first).<br />&nbsp;&nbsp;<strong>Default: sort=unsorted</strong>. For albums only.<br />
-  <strong>filter=interesting</strong> : Display the most interesting photos. Other possible value: <em>relevant</em>. For user and group albums only, also public.<br />
-  <strong>count=false</strong> : Suppress display of the counter under the album (e.g. <em>5 out of 124 on Flickr</em>). <strong>Default: count=@default_count</strong> (!config). For albums only.<br />
-  <strong>mintitle=999</strong> : Suppress display of the title in the photo captions for images below a width of 999 px. <strong>Default: mintitle=@default_mintitle</strong> (!config).<br />
-  <strong>minmetadata=999</strong> : Suppress display of the metadata in the photo captions for images below a width of 999 px. <strong>Default: minmetadata=@default_minmetadata</strong> (!config).", array(
-    '!autofloat' => $autofloat,
-    '!find_id' => $idgettr,
-    '@default_userid' => $default_userid,
-    '@default_size' => variable_get('flickr_filter_default_size', 'm'),
-    '@default_size_album' => variable_get('flickr_default_size_album', 's'),
-    '@default_limit' => variable_get('flickr_per_page', 100),
-    '@default_number' => variable_get('flickr_photos_per_page', 6),
-    '@default_mintitle' => variable_get('flickr_title_suppress_on_small', '100'),
-    '@default_minmetadata' => variable_get('flickr_metadata_suppress_on_small', '150'),
-    '@default_heading' => variable_get('flickr_filter_heading', 'p'),
-    '@default_count' => $count,
-    '@default_extend' => $extend,
-    '!config' => $config,
-    '!dateformats' => $dateformats,
-    '!relativeformats' => $relativeformats,
-  ));
+  // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $output = t("Insert a <strong>Flickr photo</strong>. A working example:
+//   <ul>
+//     <li>[flickr-<strong>photo</strong>:id=7357144724, size=m, mintitle=999, minmetadata=999] (accepts only the parameters <em>id, class, style, size, mintitle</em> and <em>minmetadata</em>)</li>
+//   </ul>
+//   To float single photos use [flickr-photo:id=9247386562, <strong>class=\"floatright\"</strong>], [flickr-photo:id=9247388074, <strong>style=\"float:left;\"</strong>] or use the !autofloat (recommended).<br /><br />
+//   Insert a <strong>Flickr album</strong>. Working examples:
+//   <ul>
+//     <li>[flickr-<strong>photoset</strong>:id=72157634563269642, size=s, num=8, tags=kids/men, media=all, sort=random, count=false, mintitle=999, minmetadata=999, heading=none]</li>
+//     <li>[flickr-<strong>gallery</strong>:id=72157648989290536, size=q, num=4, sort=views]</li>
+//     <li>[flickr-<strong>group</strong>:id=91484156@N00, size=q, num=8, tags=flowers, media=all, sort=random, count=false, mintitle=999, minmetadata=999, heading=none]</li>
+//     <li>[flickr-<strong>user</strong>:id=lolandese1, size=q, num=6, tags=kids/men, media=all, sort=random, count=false, mintitle=999, minmetadata=999, heading=none]</li>
+//     <li>[flickr-<strong>user</strong>:id=public, size=q, num=10,tags=Augusto Canario, filter=interesting, sort=views, extend=true]</li>
+//     <li>[flickr-<strong>user</strong>:id=public, size=q, num=8,location=48.867556/2.364088, date=2015-01-11, filter=interesting, sort=views]</li>
+//     <li>[flickr-<strong>favorites</strong>:id=lolandese, size=q, num=4, tags=tomosborn/people, media=all, sort=random, count=false, mintitle=999, minmetadata=999, heading=none]</li>
+//   </ul><br />
+//   Common sizes:<br />
+//   <table style='width:100%'>
+//     <tr>
+//       <td>
+//         s : small square 75<br />
+//         t : thumbnail, 100 on longest side<br />
+//         q : big square 150
+//       </td>
+//       <td>
+//         m : small, 240 on longest side<br />
+//         n : small, 320 on longest side<br />
+//         - : medium, 500 on longest side
+//       </td>
+//       <td>
+//         x: Responsive slideshow (for group, set and user IDs only)<br />
+//         y: Basic responsive slideshow (for set and user IDs only)
+//       </td>
+//     </tr>
+//   </table>
+//   The 'c' size (800px) is missing on Flickr images uploaded before March 1, 2012. Photos with non existing sizes will be skipped in albums.<br /><br />
+//   <strong>TIP</strong>: Not only the node body but also blocks make use of a text format. Build your own custom Flickr album block using the Flickr Filter syntax.<br /><br />
+//   <strong>PARAMETER EXAMPLES</strong>. Omitting a parameter will result in the default value to be used.<br />
+//   <strong>id=lolandese1</strong> : A photo, set, user or group ID. <strong>id=public</strong> grabs CC licensed public photos (only for <em>[flickr-user:...]</em>). <strong>Default: id=@default_userid</strong> (!config).<br />&nbsp;&nbsp;!find_id Valid ID values: numeric ID (the one that contains a '@'), path alias, Flickr username or the user's email.<br />
+//   <strong>class=\"floatleft foo bar\"</strong> : Syntax as in HTML. Wrap the value in quotes (or not) and put spaces between multiple classes.<br />&nbsp;&nbsp;Applies to the outer HTML element of a photo or album.<br />
+//   <strong>style=\"float:left; border:solid 2px;\"</strong> : Syntax as in HTML. Wrap the value in quotes (or not) and put semicolons between different style declarations.<br />&nbsp;&nbsp;Applies to the outer HTML element of a photo or album.<br />
+//   <strong>size=q</strong> : Big square (150px). The sizes x and y display a slideshow and ignore number, media, tags, location and sort settings.<br />&nbsp;&nbsp;<strong>Default single photo: size=@default_size, album photo: size=@default_size_album</strong> (both !config).<br />
+//   <strong>num=4</strong> : Display 4 photos. <strong>Default: num=@default_number</strong> (!config). For albums only.<br />&nbsp;&nbsp;If set to 1, the single image will behave as such. Heading and counter will be omitted, and float might apply.<br />&nbsp;&nbsp;Used to display a single changing random or recent image.<br />
+//   <strong>media=all</strong> : Display both photos and videos. <strong>Default: media=photos</strong>. For albums only.<br />
+//   <strong>tags=kids/men</strong> : <strong>Separate multiple tags with a slash (/).</strong> Display all set, group or user photos that contain the indicated tags.<br />&nbsp;&nbsp;Case insensitive, matches any tag, for photosets and galleries even partial. You can exclude results that match a term by prepending it with a - character.<br />&nbsp;&nbsp;Public albums will only display photos that match all tags. Like on Flickr spaces are removed from tags (e.g. 'Victoria park' becomes 'victoriapark').<br />&nbsp;&nbsp;For albums only.<br />
+//   <strong>extend=true</strong> : Extend the tag filter to search for matching terms also in the Flickr photo title and description besides Flickr tags.<br />&nbsp;&nbsp;<strong>Default: extend=@default_extend</strong> (!config). For albums only.<br />
+//   <strong>tag_mode=all</strong> : Matches 'all' defined tags (AND). The other possible value is 'any' (OR).<br />&nbsp;&nbsp;If this parameter is omitted, 'all' is used if no Flickr user ID is known (public search), otherwise 'any' is used. For albums only.<br />
+//   <strong>location=48.85837/2.294481/0.2</strong> : Display photos within 200 mt from the Eiffel Tower. Lat/lon/radius (in km). Separate values with a slash (/).<br />&nbsp;&nbsp;To get the coordinates for a location, right-click on a Google map and choose 'What's here?' or copy/paste it from the URL.<br />&nbsp;&nbsp;Substitute the comma (,) with a slash (/). Optionally add a radius to force a major number of results to filter on (max. 32 km).<br />&nbsp;&nbsp;If the radius is omitted it defaults to 14 meter and gradually expands to 32 km until a sufficient number of results are returned.<br />&nbsp;&nbsp;Besides decimal coordinates also degrees are accepted, e.g. 2° 21' 50.72\". For user and group albums only, also public.<br />
+//   <strong>date=2015-01-11</strong> : Display photos taken on 11 January 2015.<br />&nbsp;&nbsp;Many !dateformats (e.g. '11 Jan 2015'), also !relativeformats (e.g. 'first day of last month | last day of last month').<br />&nbsp;&nbsp;Separate two date values with a vertical bar (|) to cover a timespan of multiple days. For user and group albums only, also public.<br />&nbsp;&nbsp;<strong>Tip</strong>: Use a date in combination with a location to grab public photos of an event.<br />
+//   <strong>heading=h3</strong> : Wraps the album title in HTML tags. Use 'p' to apply no style or 'none' to suppress the title. <strong>Default heading=@default_heading</strong> (!config). For albums only.<br />
+//   <strong>sort=views</strong> : Display the most viewed Flickr photos first (popularity, slower response after cache clear).<br />&nbsp;&nbsp;Other values: <em>unsorted</em> = recent as delivered by the Flickr API (fastest response),<br />&nbsp;&nbsp;<em>random</em> (slower response after cache clear), <em>taken</em> (newest first), <em>posted</em> (newest first) , <em>added</em> (for groups only, newest first) and <em>id</em> (on photo ID, newest first).<br />&nbsp;&nbsp;<strong>Default: sort=unsorted</strong>. For albums only.<br />
+//   <strong>filter=interesting</strong> : Display the most interesting photos. Other possible value: <em>relevant</em>. For user and group albums only, also public.<br />
+//   <strong>count=false</strong> : Suppress display of the counter under the album (e.g. <em>5 out of 124 on Flickr</em>). <strong>Default: count=@default_count</strong> (!config). For albums only.<br />
+//   <strong>mintitle=999</strong> : Suppress display of the title in the photo captions for images below a width of 999 px. <strong>Default: mintitle=@default_mintitle</strong> (!config).<br />
+//   <strong>minmetadata=999</strong> : Suppress display of the metadata in the photo captions for images below a width of 999 px. <strong>Default: minmetadata=@default_minmetadata</strong> (!config).", array(
+//     '!autofloat' => $autofloat,
+//     '!find_id' => $idgettr,
+//     '@default_userid' => $default_userid,
+//     '@default_size' => \Drupal::config('flickr_filter.settings')->get('flickr_filter_default_size'),
+//     '@default_size_album' => variable_get('flickr_default_size_album', 's'),
+//     '@default_limit' => variable_get('flickr_per_page', 100),
+//     '@default_number' => variable_get('flickr_photos_per_page', 6),
+//     '@default_mintitle' => variable_get('flickr_title_suppress_on_small', '100'),
+//     '@default_minmetadata' => variable_get('flickr_metadata_suppress_on_small', '150'),
+//     '@default_heading' => variable_get('flickr_filter_heading', 'p'),
+//     '@default_count' => $count,
+//     '@default_extend' => $extend,
+//     '!config' => $config,
+//     '!dateformats' => $dateformats,
+//     '!relativeformats' => $relativeformats,
+//   ));
+
   if ($long) {
     $output .= ' ' . t('The size parameter can be one of the following:');
     $items = array();
     foreach (flickr_photo_sizes() as $key => $text) {
       $items[] = "<code>$key</code> &mdash; (" . $text['label'] . ') ' . $text['description'];
     }
-    $output .= theme('item_list', array('items' => $items));
+    // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// $output .= theme('item_list', array('items' => $items));
+
   }
-  $toggle = l(t('expand / collapse'), '#', array(
-    'attributes' => array(
-      'title' => t('Examples to embed Flickr images'),
-    ),
-  ));
+  // @FIXME
+// l() expects a Url object, created from a route name or external URI.
+// $toggle = l(t('expand / collapse'), '#', array(
+//     'attributes' => array(
+//       'title' => t('Examples to embed Flickr images'),
+//     ),
+//   ));
+
   $options = array(
     'handle' => t('Flickr Filter options. !toggle', array('!toggle' => $toggle)),
     'content' => $output,
     'collapsed' => TRUE,
   );
-  $output = module_exists('ctools') && variable_get('flickr_filter_collapsible', 1) ? theme('ctools_collapsible', $options) : $output;
+  // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// $output = \Drupal::moduleHandler()->moduleExists('ctools') && variable_get('flickr_filter_collapsible', 1) ? theme('ctools_collapsible', $options) : $output;
+
   return $output;
 }
 
@@ -212,30 +241,49 @@ function flickr_filter_callback_photo($matches) {
   if (isset($config['id'])) {
     if ($photo = flickr_photos_getinfo($config['id'])) {
       if (!isset($config['size'])) {
-        $config['size'] = variable_get('flickr_filter_default_size', 'm');
+        $config['size'] = \Drupal::config('flickr_filter.settings')->get('flickr_filter_default_size');
       }
       if (!isset($config['mintitle'])) {
-        $config['mintitle'] = variable_get('flickr_title_suppress_on_small', '100');
+        // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $config['mintitle'] = variable_get('flickr_title_suppress_on_small', '100');
+
       }
       if (!isset($config['minmetadata'])) {
-        $config['minmetadata'] = variable_get('flickr_metadata_suppress_on_small', '150');
+        // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $config['minmetadata'] = variable_get('flickr_metadata_suppress_on_small', '150');
+
       }
       switch ($config['size']) {
         case "x":
         case "y":
           drupal_set_message(t("Do not use a slideshow for a single image."), 'error');
-          $config['size'] = variable_get('flickr_filter_default_size', 'm');
+          $config['size'] = \Drupal::config('flickr_filter.settings')->get('flickr_filter_default_size');
           break;
       }
       $sizes = flickr_photo_sizes();
       if (flickr_in_array_r($sizes[$config['size']]['label'], flickr_photos_getsizes($photo['id']))) {
-        return theme('flickr_photo', array(
-          'photo' => $photo,
-          'size' => $config['size'],
-          'attribs' => $attribs,
-          'min_title' => $config['mintitle'],
-          'min_metadata' => $config['minmetadata'],
-        ));
+        // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// return theme('flickr_photo', array(
+//           'photo' => $photo,
+//           'size' => $config['size'],
+//           'attribs' => $attribs,
+//           'min_title' => $config['mintitle'],
+//           'min_metadata' => $config['minmetadata'],
+//         ));
+
       }
       else {
         // Generate an "empty" image of the requested size containing a message.
@@ -254,7 +302,12 @@ function flickr_filter_callback_photo($matches) {
 function flickr_filter_callback_album($matches) {
   list($config, $attribs) = flickr_filter_split_config($matches[1]);
   if (!isset($config['id']) || $config['id'] == 'public') {
-    $default_userid = variable_get('flickr_default_userid', '');
+    // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $default_userid = variable_get('flickr_default_userid', '');
+
     $config['id'] = !isset($config['id']) ? $default_userid : $config['id'];
     $config['id'] = (!empty($default_userid) && $config['id'] != 'public') ? $default_userid : '39873962@N08';
   }
@@ -274,7 +327,7 @@ function flickr_filter_callback_album($matches) {
     $config['media'] = 'photos';
   }
   if (!isset($config['heading'])) {
-    $config['heading'] = variable_get('flickr_filter_heading', 'p');
+    $config['heading'] = \Drupal::config('flickr_filter.settings')->get('flickr_filter_heading');
   }
   if (!isset($config['tags'])) {
     $config['tags'] = '';
@@ -304,10 +357,20 @@ function flickr_filter_callback_album($matches) {
     }
   }
   if (!isset($config['count'])) {
-    $config['count'] = variable_get('flickr_counter', 1) ? 'true' : 'false';
+    // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $config['count'] = variable_get('flickr_counter', 1) ? 'true' : 'false';
+
   }
   if (!isset($config['extend'])) {
-    $config['extend'] = variable_get('flickr_extend', 1);
+    // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $config['extend'] = variable_get('flickr_extend', 1);
+
   }
   else {
     $config['extend'] = $config['extend'] == 'false' ? 0 : 1;
@@ -377,7 +440,7 @@ function flickr_filter_callback_group($matches) {
       $config['sort'] = 'unsorted';
     }
     if (!isset($config['heading'])) {
-      $config['heading'] = variable_get('flickr_filter_heading', 'p');
+      $config['heading'] = \Drupal::config('flickr_filter.settings')->get('flickr_filter_heading');
     }
     if (!isset($config['tags'])) {
       $config['tags'] = '';
@@ -386,7 +449,12 @@ function flickr_filter_callback_group($matches) {
       $config['tags'] = str_replace("/", ",", $config['tags']);
     }
     if (!isset($config['count'])) {
-      $config['count'] = variable_get('flickr_counter', 1) ? 'true' : 'false';
+      // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $config['count'] = variable_get('flickr_counter', 1) ? 'true' : 'false';
+
     }
     if (!isset($config['mintitle'])) {
       $config['mintitle'] = NULL;
@@ -428,7 +496,12 @@ function flickr_filter_callback_group($matches) {
       }
     }
     if (!isset($config['extend'])) {
-      $config['extend'] = variable_get('flickr_extend', 1);
+      // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $config['extend'] = variable_get('flickr_extend', 1);
+
     }
     else {
       $config['extend'] = $config['extend'] == 'false' ? 0 : 1;
@@ -477,7 +550,7 @@ function flickr_filter_callback_gallery($matches) {
       $config['sort'] = 'unsorted';
     }
     if (!isset($config['heading'])) {
-      $config['heading'] = variable_get('flickr_filter_heading', 'p');
+      $config['heading'] = \Drupal::config('flickr_filter.settings')->get('flickr_filter_heading');
     }
     if (!isset($config['tags'])) {
       $config['tags'] = '';
@@ -486,7 +559,12 @@ function flickr_filter_callback_gallery($matches) {
       $config['tags'] = str_replace("/", ",", $config['tags']);
     }
     if (!isset($config['count'])) {
-      $config['count'] = variable_get('flickr_counter', 1) ? 'true' : 'false';
+      // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $config['count'] = variable_get('flickr_counter', 1) ? 'true' : 'false';
+
     }
     if (!isset($config['mintitle'])) {
       $config['mintitle'] = NULL;
@@ -528,7 +606,12 @@ function flickr_filter_callback_gallery($matches) {
       }
     }
     if (!isset($config['extend'])) {
-      $config['extend'] = variable_get('flickr_extend', 1);
+      // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $config['extend'] = variable_get('flickr_extend', 1);
+
     }
     else {
       $config['extend'] = $config['extend'] == 'false' ? 0 : 1;
@@ -558,7 +641,12 @@ function flickr_filter_callback_favorites($matches) {
   list($config, $attribs) = flickr_filter_split_config($matches[1]);
 
   if (!isset($config['id'])) {
-    $default_userid = variable_get('flickr_default_userid', '');
+    // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $default_userid = variable_get('flickr_default_userid', '');
+
     $config['id'] = !empty($default_userid) ? $default_userid : NULL;
   }
   if (isset($config['id'])) {
@@ -581,7 +669,7 @@ function flickr_filter_callback_favorites($matches) {
       $config['sort'] = 'unsorted';
     }
     if (!isset($config['heading'])) {
-      $config['heading'] = variable_get('flickr_filter_heading', 'p');
+      $config['heading'] = \Drupal::config('flickr_filter.settings')->get('flickr_filter_heading');
     }
     if (!isset($config['tags'])) {
       $config['tags'] = '';
@@ -590,7 +678,12 @@ function flickr_filter_callback_favorites($matches) {
       $config['tags'] = str_replace("/", ",", $config['tags']);
     }
     if (!isset($config['count'])) {
-      $config['count'] = variable_get('flickr_counter', 1) ? 'true' : 'false';
+      // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $config['count'] = variable_get('flickr_counter', 1) ? 'true' : 'false';
+
     }
     if (!isset($config['mintitle'])) {
       $config['mintitle'] = NULL;
@@ -632,7 +725,12 @@ function flickr_filter_callback_favorites($matches) {
       }
     }
     if (!isset($config['extend'])) {
-      $config['extend'] = variable_get('flickr_extend', 1);
+      // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $config['extend'] = variable_get('flickr_extend', 1);
+
     }
     else {
       $config['extend'] = $config['extend'] == 'false' ? 0 : 1;

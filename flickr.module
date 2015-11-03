@@ -1,11 +1,65 @@
 <?php
+
 /**
  * @file
- * The Flickr module.
+ * Flickr module.
  */
 
+use Drupal\Core\Site\Settings;
+use Drupal\Component\Utility\Crypt;
+
 // Load flickr.inc from the flickr module.
+//TODO: this is being called three times
 module_load_include('inc', 'flickr');
+
+/**
+ * Access callback for Flickr submodule menu items.
+ */
+function flickr_apikey_ready_access($permission) {
+  if (flickr_get_api_object() && \Drupal::currentUser()->hasPermission($permission)) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+
+/**
+ * Instantiates a Flickr library object.
+ *
+ * @return \Drupal\flickr\DrupalFlickr
+ *   Drupal Flickr library object.
+ */
+function flickr_get_api_object() {
+  $flickr = &drupal_static(__FUNCTION__);
+
+  if (isset($flickr)) {
+    return $flickr;
+  }
+
+  $config = \Drupal::config('flickr.settings');
+
+  // We allow the class name to be overridden, following the example of core's
+  // mailsystem, in order to use alternate Flickr classes. The bundled tests
+  // use this approach to extend the Flickr class with a test server.
+  $classname = $config->get('api_classname');
+
+  if (!class_exists($classname) && ($classname != 'Drupal\flickr_test\DrupalFlickr')) {
+    $msg = t('Failed to load Flickr PHP library. Please refer to the installation requirements.');
+    \Drupal::logger('flickr')->error($msg);
+    drupal_set_message($msg, 'error');
+    return NULL;
+  }
+
+  $api_key = $config->get('flickr_api_key');
+  if (!strlen($api_key)) {
+    \Drupal::logger('flickr')->error('Flickr Error: API Key cannot be blank.');
+    return NULL;
+  }
+
+  $flickr = new $classname($api_key);
+
+  return $flickr;
+}
 
 /**
  * Implements hook_help().
@@ -252,13 +306,13 @@ $nsid = \Drupal::config('flickr.settings')->get('flickr_default_userid');
  * Implements hook_user_load().
  * Adds the Flickr variables to the user object.
  */
-function flickr_user_load($users) {
+/*function flickr_user_load($users) {
   $result = db_query('SELECT * FROM {flickr_users} WHERE uid IN (:uids)', array(':uids' => array_keys($users)));
   foreach ($result as $record) {
     $users[$record->uid]->flickr['identifier'] = $record->identifier;
     $users[$record->uid]->flickr['nsid'] = $record->nsid;
   }
-}
+}*/
 
 /**
  * Implements hook_user_presave().
@@ -773,20 +827,20 @@ $overlay = \Drupal::config('flickr.settings')->get('flickr_info_overlay');
 // // @FIXME
 // // This looks like another module's variable. You'll need to rewrite this call
 // // to ensure that it uses the correct configuration object.
-// $uri = module_exists('style_settings') ? variable_get('flickrstyle_magnifier_image', '') : '';
+// $uri = \Drupal::moduleHandler()->moduleExists('style_settings') ? variable_get('flickrstyle_magnifier_image', '') : '';
 
     $magnifierurl = empty($uri) ? '/' . drupal_get_path('module', 'flickr') . '/style/img/magnifier.png' : $uri;
     // @FIXME
 // // @FIXME
 // // This looks like another module's variable. You'll need to rewrite this call
 // // to ensure that it uses the correct configuration object.
-// $iconsize = module_exists('style_settings') ? variable_get('flickrstyle_magnifier_size', '50px') : '50px';
+// $iconsize = \Drupal::moduleHandler()->moduleExists('style_settings') ? variable_get('flickrstyle_magnifier_size', '50px') : '50px';
 
     // @FIXME
 // // @FIXME
 // // This looks like another module's variable. You'll need to rewrite this call
 // // to ensure that it uses the correct configuration object.
-// $magnifier = variable_get('flickrstyle_emphasize', 2) == 4 && module_exists('flickrstyle') ? '<span class="hover-icon"><img src="' . $magnifierurl . '" style="width:' . $iconsize . ';height:' . $iconsize . ';"></span>' : '';
+// $magnifier = variable_get('flickrstyle_emphasize', 2) == 4 && \Drupal::moduleHandler()->moduleExists('flickrstyle') ? '<span class="hover-icon"><img src="' . $magnifierurl . '" style="width:' . $iconsize . ';height:' . $iconsize . ';"></span>' : '';
 
   }
   else {
@@ -839,7 +893,7 @@ if (\Drupal::config('flickr.settings')->get('flickr_class') == NULL && \Drupal::
 // // @FIXME
 // // This looks like another module's variable. You'll need to rewrite this call
 // // to ensure that it uses the correct configuration object.
-// if ($photo['media'] == 'video' && module_exists('colorbox') && variable_get('colorbox_inline', 0) == 1) {
+// if ($photo['media'] == 'video' && \Drupal::moduleHandler()->moduleExists('colorbox') && variable_get('colorbox_inline', 0) == 1) {
 //       // @FIXME
 // // l() expects a Url object, created from a route name or external URI.
 // // return '<div style="display: none;">

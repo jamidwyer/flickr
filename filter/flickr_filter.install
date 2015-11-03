@@ -9,9 +9,19 @@
  */
 function flickr_filter_install() {
   // For the preview in the settings form we need Colorbox also on admin pages.
-  if (module_exists('colorbox')) {
-    $pages = variable_get('colorbox_pages', "admin*\nimagebrowser*\nimg_assist*\nimce*\nnode/add/*\nnode/*/edit\nprint/*\nprintpdf/*\nsystem/ajax\nsystem/ajax/*");
-    variable_set('colorbox_pages', str_replace("admin*", "", $pages));
+  if (\Drupal::moduleHandler()->moduleExists('colorbox')) {
+    // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $pages = variable_get('colorbox_pages', "admin*\nimagebrowser*\nimg_assist*\nimce*\nnode/add/*\nnode/*/edit\nprint/*\nprintpdf/*\nsystem/ajax\nsystem/ajax/*");
+
+    // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// variable_set('colorbox_pages', str_replace("admin*", "", $pages));
+
   }
 }
 
@@ -19,7 +29,7 @@ function flickr_filter_install() {
  * Implements hook_uninstall().
  */
 function flickr_filter_uninstall() {
-  variable_del('flickr_filter_heading');
-  variable_del('flickr_filter_default_size');
-  variable_del('flickr_filter_collapsible');
+  \Drupal::config('flickr_filter.settings')->clear('flickr_filter_heading')->save();
+  \Drupal::config('flickr_filter.settings')->clear('flickr_filter_default_size')->save();
+  \Drupal::config('flickr_filter.settings')->clear('flickr_filter_collapsible')->save();
 }
