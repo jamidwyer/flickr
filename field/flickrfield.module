@@ -22,19 +22,17 @@ function flickrfield_help($path, $arg) {
  * Implements hook_field_info().
  */
 function flickrfield_field_info() {
-  $sizes = array_keys(flickr_photo_sizes());
+//  $sizes = array_keys(flickr_photo_sizes());
   return array(
     'flickrfield' => array(
       'label' => 'Flickr Photo',
       'description' => t('Store Flickr Photo or Photoset IDs and display the photos in nodes and views.'),
       'default_widget' => 'flickrfield',
-      'default_formatter' => $sizes[0],
     ),
     'flickrfield_photoset' => array(
       'label' => 'Flickr photo set',
       'description' => t('Field for storing a reference to a Flickr photo set.'),
       'default_widget' => 'flickrfield_flickrid',
-      'default_formatter' => 'photoset_primaryphoto_size' . $sizes[0] . '_nolink',
     ),
   );
 }
@@ -167,34 +165,7 @@ function flickrfield_field_is_empty($item, $field) {
  * Implements hook_field_formatter_info().
  */
 function flickrfield_field_formatter_info() {
-  $sizes = flickr_photo_sizes();
   // Formatters for general Flickr field.
-  foreach ($sizes as $size => $info) {
-    if (stripos($info['label'], t('slideshow')) == FALSE) {
-      $formatters[$size] = array(
-        'label' => $info['label'],
-        'field types' => array('flickrfield'),
-      );
-    }
-  }
-
-  // Formatters for Flickr photoset field.
-  foreach ($sizes as $size => $info) {
-    if (stripos($info['label'], t('slideshow')) == FALSE) {
-      $formatters['photoset_primaryphoto_size' . $size . '_nolink'] = array(
-        'label' => t('Primary set photo at size "@size"', array('@size' => $info['label'])),
-        'field types' => array('flickrfield_photoset'),
-      );
-      $formatters['photoset_primaryphoto_size' . $size . '_linknode'] = array(
-        'label' => t('Primary set photo at size "@size" with link to node', array('@size' => $info['label'])),
-        'field types' => array('flickrfield_photoset'),
-      );
-      $formatters['photoset_primaryphoto_size' . $size . '_linkflickrcomset'] = array(
-        'label' => t('Primary set photo at size "@size" with link to set on Flickr.com', array('@size' => $info['label'])),
-        'field types' => array('flickrfield_photoset'),
-      );
-    }
-  }
   $formatters['photoset_flickrcomslideshow'] = array(
     'label' => 'Embedded Flickr.com slideshow',
     'field types' => array('flickrfield_photoset'),
@@ -219,7 +190,6 @@ function flickrfield_field_formatter_info() {
  */
 function flickrfield_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
-  $sizes = array_keys(flickr_photo_sizes());
   foreach ($items as $delta => $item) {
     $variables = array(
       '#node' => $entity,
@@ -250,25 +220,6 @@ function flickrfield_field_formatter_view($entity_type, $entity, $field, $instan
  */
 function flickrfield_theme() {
   $themes = array();
-  foreach (flickr_photo_sizes() as $size => $info) {
-    $themes['flickrfield_formatter_' . $size] = array(
-      'variables' => array('element'),
-      'function' => 'theme_flickrfield_field_formatter',
-    );
-    // Theme function for the primary photo formatters of a Flickr photo set.
-    $themes['flickrfield_formatter_photoset_primaryphoto_size' . $size . '_nolink'] = array(
-      'variables' => array('element'),
-      'function' => 'theme_flickrfield_formatter_photoset_primaryphoto',
-    );
-    $themes['flickrfield_formatter_photoset_primaryphoto_size' . $size . '_linknode'] = array(
-      'variables' => array('element'),
-      'function' => 'theme_flickrfield_formatter_photoset_primaryphoto',
-    );
-    $themes['flickrfield_formatter_photoset_primaryphoto_size' . $size . '_linkflickrcomset'] = array(
-      'variables' => array('element'),
-      'function' => 'theme_flickrfield_formatter_photoset_primaryphoto',
-    );
-  }
   return $themes + array(
     'flickrfield_photo' => array(
       'variables' => array(

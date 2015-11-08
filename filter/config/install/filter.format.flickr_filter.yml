@@ -1,0 +1,15 @@
+format: flickr_filter
+name: 'Flickr filter'
+status: true
+weight: 0
+roles:
+  - authenticated
+filters:
+  # Entity token and URL filter.
+  filter_flickr:
+    id: filter_flickr
+    provider: filter
+    status: true
+    weight: 0
+    settings: {  }
+langcode: en
