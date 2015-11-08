@@ -19,7 +19,7 @@ function flickrfield_feeds_processor_targets_alter(&$targets, $entity_type, $bun
       foreach ($info['columns'] as $id => $column) {
 
         $targets[$name . ':' . $id] = array(
-          'name'        => check_plain($instance['label'] . ' ' . t('(@id)', array('@id' => $id))),
+          'name'        => \Drupal\Component\Utility\SafeMarkup::checkPlain($instance['label'] . ' ' . t('(@id)', array('@id' => $id))),
           'callback'    => 'flickrfield_feeds_set_target',
           'description' => t('The field instance @label  -column @id.', array(
             '@label' => $instance['label'],
@@ -58,7 +58,7 @@ function flickrfield_feeds_set_target($source, $entity, $target, $value) {
   $value = is_array($value) ? $value : array($value);
 
   // Set the language of the field depending on the mapping.
-  $language = isset($mapping['language']) ? $mapping['language'] : LANGUAGE_NONE;
+  $language = isset($mapping['language']) ? $mapping['language'] : \Drupal\Core\Language\Language::LANGCODE_NOT_SPECIFIED;
 
   // Determine the field we are matching against.
   list($target, $match_key) = explode(':', $target, 2);

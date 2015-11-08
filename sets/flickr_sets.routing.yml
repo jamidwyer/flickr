@@ -1,0 +1,11 @@
+flickr_sets.photosets:
+  path: '/flickr/{account}/sets'
+  defaults:
+    _title: Sets
+    _controller: '\Drupal\flickr_sets\Controller\DefaultController::flickr_sets_photosets'
+  requirements: {  }
+flickr_sets.photoset:
+  path: '/flickr/{account}/sets/{set}'
+  defaults:
+    _controller: '\Drupal\flickr_sets\Controller\DefaultController::flickr_sets_photoset'
+  requirements: {  }

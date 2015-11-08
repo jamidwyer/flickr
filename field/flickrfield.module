@@ -111,24 +111,24 @@ function flickrfield_form_process_flickrfield($element, $form_state, $form = arr
     '#maxlength' => 64,
     '#default_value' => !empty($element['#value']['id']) ? $element['#value']['id'] : '',
   );
-  $idgettr = l(t('Find your Flickr ID.'), 'http://idgettr.com/', array(
-    'attributes' => array(
-      'title' => t('Use the URL of your photostream to find the Flickr ID.'),
-      'target' => '_blank',
-    ),
-  ));
-  $element['nsid'] = array(
-    '#type' => 'textfield',
-    '#title' => t('User Id'),
-    '#maxlength' => 64,
-    '#default_value' => !empty($element['#value']['nsid']) ? $element['#value']['nsid'] : variable_get('flickr_default_userid', ''),
-    '#required' => $element['#required'],
-    '#description' => t("The user id of the Flickr user who owns the photos. If this is left blank, the sites's default user will be used. Current default id is @id. !find_id", array(
-      '@id' => variable_get('flickr_default_userid', ''),
-      '!find_id' => $idgettr,
-    )),
-  );
-  drupal_alter('flickrfield_process', $element);
+  $idgettr = \Drupal::l(t('Find your Flickr ID.'), \Drupal\Core\Url::fromUri('http://idgettr.com/'));
+  // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// $element['nsid'] = array(
+//     '#type' => 'textfield',
+//     '#title' => t('User Id'),
+//     '#maxlength' => 64,
+//     '#default_value' => !empty($element['#value']['nsid']) ? $element['#value']['nsid'] : variable_get('flickr_default_userid', ''),
+//     '#required' => $element['#required'],
+//     '#description' => t("The user id of the Flickr user who owns the photos. If this is left blank, the sites's default user will be used. Current default id is @id. !find_id", array(
+//       '@id' => variable_get('flickr_default_userid', ''),
+//       '!find_id' => $idgettr,
+//     )),
+//   );
+
+  \Drupal::moduleHandler()->alter('flickrfield_process', $element);
   return $element;
 }
 
@@ -227,7 +227,16 @@ function flickrfield_field_formatter_view($entity_type, $entity, $field, $instan
       '#formatter' => $display['type'],
       '#field_name' => $field['field_name'],
     );
-    $element[$delta]['#markup'] = theme('flickrfield_formatter_' . $display['type'], $variables);
+    // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// $element[$delta]['#markup'] = theme('flickrfield_formatter_' . $display['type'], $variables);
+
   }
   return $element;
 }
@@ -313,22 +322,40 @@ function theme_flickrfield_field_formatter($element) {
   switch ($item['type']) {
     case 'photo_id':
       $photo_data = flickr_photos_getinfo($item['id']);
-      return theme('flickr_photo', array(
-        'format' => NULL,
-        'attribs' => NULL,
-        'size' => $formatter,
-        'photo' => $photo_data,
-      ));
+      // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// return theme('flickr_photo', array(
+//         'format' => NULL,
+//         'attribs' => NULL,
+//         'size' => $formatter,
+//         'photo' => $photo_data,
+//       ));
+
 
     case 'id':
       $photo_data = flickr_photosets_getinfo($item['id']);
-      return theme('flickr_photoset', array(
-        'owner' => $photo_data['owner'],
-        'attribs' => NULL,
-        'size' => $formatter,
-        'photoset' => $photo_data,
-        'per_page' => variable_get('flickr_sets_photos_per_set', 6),
-      ));
+      // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// return theme('flickr_photoset', array(
+//         'owner' => $photo_data['owner'],
+//         'attribs' => NULL,
+//         'size' => $formatter,
+//         'photoset' => $photo_data,
+//         'per_page' => variable_get('flickr_sets_photos_per_set', 6),
+//       ));
+
   }
 }
 
@@ -360,7 +387,16 @@ function theme_flickrfield_formatter_photoset_primaryphoto($element) {
   $title = is_array($set_data['title']) ? $set_data['title']['_content'] : $set_data['title'];
 
   $vars = array($img, $link, $set_url, $size, $title);
-  return theme('flickrfield_photoset_primaryphoto', $vars);
+  // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// return theme('flickrfield_photoset_primaryphoto', $vars);
+
 }
 
 /**
@@ -371,9 +407,18 @@ function theme_flickrfield_formatter_photoset_flickrcomslideshow($variables) {
     return;
   }
   $id = $variables['#item']['flickrid'];
-  return theme('flickr_flickrcomslideshow', array(
-    'id' => $id,
-  ));
+  // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// return theme('flickr_flickrcomslideshow', array(
+//     'id' => $id,
+//   ));
+
 }
 
 /**
@@ -384,9 +429,18 @@ function theme_flickrfield_formatter_photoset_flickrcomslideshow_simple($variabl
     return;
   }
   $id = $variables['#item']['flickrid'];
-  return theme('flickr_flickrcomslideshow_simple', array(
-    'id' => $id,
-  ));
+  // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// return theme('flickr_flickrcomslideshow_simple', array(
+//     'id' => $id,
+//   ));
+
 }
 
 /**
@@ -395,7 +449,10 @@ function theme_flickrfield_formatter_photoset_flickrcomslideshow_simple($variabl
 function theme_flickrfield_formatter_photoset_flickrcomsetlink($variables) {
   $set_data = flickr_photosets_getinfo($variables['#item']['flickrid']);
   $set_url = flickr_photoset_page_url($set_data['owner'], $set_data['id']);
-  return l($set_url, $set_url);
+  // @FIXME
+// l() expects a Url object, created from a route name or external URI.
+// return l($set_url, $set_url);
+
 }
 
 /**
@@ -426,14 +483,20 @@ function theme_flickrfield_photoset_primaryphoto($variables) {
   $size = $variables['3'];
   $title = $variables['4'];
   if ($link) {
-    $output = '<div class="flickr-photoset-img">' . l($img, $link, array(
-      'attributes' => array('title' => $title),
-      'html' => TRUE,
-    )) . '</div>';
+    // @FIXME
+// l() expects a Url object, created from a route name or external URI.
+// $output = '<div class="flickr-photoset-img">' . l($img, $link, array(
+//       'attributes' => array('title' => $title),
+//       'html' => TRUE,
+//     )) . '</div>';
+
   }
   else {
     $output = '<div class="flickr-photoset-img">' . $img . '</div>';
   }
-  $output .= '<div class="flickr-citation">' . l(t('Source: Flickr'), $set_url) . '</div>';
+  // @FIXME
+// l() expects a Url object, created from a route name or external URI.
+// $output .= '<div class="flickr-citation">' . l(t('Source: Flickr'), $set_url) . '</div>';
+
   return $output;
 }

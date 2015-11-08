@@ -1,0 +1,7 @@
+flickr_sets.photosets:
+  route_name: flickr_sets.photosets
+  title: Sets
+  description: 'Display the Flickr photosets for the specified user'
+flickr_sets.photoset:
+  route_name: flickr_sets.photoset
+  parent: flickr_sets.photosets

@@ -50,13 +50,18 @@ function flickr_sets_menu() {
 function flickr_set_load($sid, $page = 1) {
   // TODO: Why this called for /flickr and does not show for admin role?
   if (is_numeric($sid)) {
-    return flickr_request('flickr.photosets.getPhotos',
-      array(
-        'photoset_id' => $sid,
-        'page' => $page,
-        'per_page' => variable_get('flickr_photos_per_page', 20),
-      )
-    );
+    // @FIXME
+// // @FIXME
+// // This looks like another module's variable. You'll need to rewrite this call
+// // to ensure that it uses the correct configuration object.
+// return flickr_request('flickr.photosets.getPhotos',
+//       array(
+//         'photoset_id' => $sid,
+//         'page' => $page,
+//         'per_page' => variable_get('flickr_photos_per_page', 20),
+//       )
+//     );
+
   }
 }
 
@@ -76,16 +81,23 @@ function flickr_sets_page_title($user) {
 function flickr_sets_photosets($account, $nsid = NULL) {
   global $pager_page_array, $pager_total, $pager_total_items, $user;
 
-  drupal_set_title(flickr_sets_page_title($user));
+  // @FIXME
+// drupal_set_title() has been removed. There are now a few ways to set the title
+// dynamically, depending on the situation.
+// 
+// 
+// @see https://www.drupal.org/node/2067859
+// drupal_set_title(flickr_sets_page_title($user));
+
   $uid = $account->uid;
   $nsid = $account->flickr['nsid'];
   // Set this to something else if you want multiple pagers.
   $element = 0;
   $pager_page_array[$element] = empty($_GET['page']) ? 0 : (int) $_GET['page'];
-  $per_page = variable_get('flickr_sets_per_page', 8);
+  $per_page = \Drupal::config('flickr_sets.settings')->get('flickr_sets_per_page');
   // First we need the complete list of sets just for the pager info.
   $set_response = flickr_photosets_getlist($nsid);
-  $pager_total[$element] = ceil(count($set_response) / variable_get('flickr_sets_per_page', 8));
+  $pager_total[$element] = ceil(count($set_response) / \Drupal::config('flickr_sets.settings')->get('flickr_sets_per_page'));
   $pager_total_items[$element] = count($set_response);
   // Now we only get the sets for the corresponding page.
   $set_response = flickr_photosets_getlist($nsid, $pager_page_array[$element] + 1);
@@ -99,12 +111,21 @@ function flickr_sets_photosets($account, $nsid = NULL) {
     return '';
   }
 
-  return theme('flickr_sets_photosets', array(
-    'uid' => $uid,
-    'per_page' => $per_page,
-    'nsid' => $nsid,
-    'photosets' => $set_response,
-  ));
+  // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// return theme('flickr_sets_photosets', array(
+//     'uid' => $uid,
+//     'per_page' => $per_page,
+//     'nsid' => $nsid,
+//     'photosets' => $set_response,
+//   ));
+
 }
 
 /**
@@ -127,7 +148,7 @@ function flickr_sets_photoset($account, $set) {
   // Set this to something else if you want multiple pagers.
   $element = 0;
   $pager_page_array[$element] = empty($_GET['page']) ? 0 : (int) $_GET['page'];
-  $per_page = variable_get('flickr_sets_photos_per_set', 6);
+  $per_page = \Drupal::config('flickr_sets.settings')->get('flickr_sets_photos_per_set');
 
   // Request set of photos.
   $set_response = flickr_set_load($id, $pager_page_array[$element] + 1);
@@ -143,12 +164,21 @@ function flickr_sets_photoset($account, $set) {
   $pager_total_items[$element] = $set_response['photoset']['total'];
   $pager_total[$element] = $set_response['photoset']['pages'];
 
-  return theme('flickr_sets_photoset', array(
-    'uid' => $uid,
-    'per_page' => $per_page,
-    'photo_arr' => $set_response,
-    'set_info' => $set_info,
-  ));
+  // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// return theme('flickr_sets_photoset', array(
+//     'uid' => $uid,
+//     'per_page' => $per_page,
+//     'photo_arr' => $set_response,
+//     'set_info' => $set_info,
+//   ));
+
 }
 
 /**
@@ -180,18 +210,45 @@ function theme_flickr_sets_photosets($variables) {
   $nsid = $variables['nsid'];
   $photosets = $variables['photosets'];
 
-  $output = theme('pager', array('quantity' => variable_get('flickr_sets_per_page', 8)));
+  // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// $output = theme('pager', array('quantity' => variable_get('flickr_sets_per_page', 8)));
+
   $output .= "<div class='flickr-photosets'>\n";
   foreach ((array) $photosets as $photoset) {
-    $output .= theme('flickr_sets_photoset_box', array(
-      'photoset' => $photoset,
-      'uid' => $uid,
-      'nsid' => $nsid,
-      'size' => variable_get('flickr_sets_thumb_default_size', 's'),
-    ));
+    // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// $output .= theme('flickr_sets_photoset_box', array(
+//       'photoset' => $photoset,
+//       'uid' => $uid,
+//       'nsid' => $nsid,
+//       'size' => variable_get('flickr_sets_thumb_default_size', 's'),
+//     ));
+
   }
   $output .= '</div>';
-  $output .= theme('pager', array('quantity' => variable_get('flickr_sets_per_page', 8)));
+  // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// $output .= theme('pager', array('quantity' => variable_get('flickr_sets_per_page', 8)));
+
   return $output;
 }
 
@@ -203,9 +260,27 @@ function theme_flickr_sets_photoset($variables) {
   $per_page = $variables['per_page'];
   $photo_arr = $variables['photo_arr'];
   $set_info = $variables['set_info'];
-  $output = theme('pager', array('quantity' => variable_get('flickr_sets_photos_per_set', 6)));
+  // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// $output = theme('pager', array('quantity' => variable_get('flickr_sets_photos_per_set', 6)));
+
   $output .= flickr_album('photoset', $set_info['id'], $per_page, NULL, 'photos', '', '', 101, 'unsorted', 'h1', NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, $photo_arr['photoset']['page']);
-  $output .= theme('pager', array('quantity' => variable_get('flickr_photos_per_page', 6)));
+  // @FIXME
+// theme() has been renamed to _theme() and should NEVER be called directly.
+// Calling _theme() directly can alter the expected output and potentially
+// introduce security issues (see https://www.drupal.org/node/2195739). You
+// should use renderable arrays instead.
+// 
+// 
+// @see https://www.drupal.org/node/2195739
+// $output .= theme('pager', array('quantity' => variable_get('flickr_photos_per_page', 6)));
+
 
   return $output;
 }
@@ -222,9 +297,15 @@ function theme_flickr_sets_photoset_box($variables) {
   $title = is_array($photoset['title']) ? $photoset['title']['_content'] : $photoset['title'];
 
   $output = "<div class='flickr-photoset-box'>\n";
-  $output .= l(flickr_img($photoset, $size), "flickr/{$uid}/sets/{$photoset['id']}", array('html' => TRUE)) . "\n";
-  $output .= '<div class="flickr-photoset-title">' . l($title, "flickr/{$uid}/sets/{$photoset['id']}") . "</div>\n";
-  $output .= '<div class="flickr-photoset-count">' . format_plural($photoset['photos'], '@count photo', '@count photos') . "</div>\n";
+  // @FIXME
+// l() expects a Url object, created from a route name or external URI.
+// $output .= l(flickr_img($photoset, $size), "flickr/{$uid}/sets/{$photoset['id']}", array('html' => TRUE)) . "\n";
+
+  // @FIXME
+// l() expects a Url object, created from a route name or external URI.
+// $output .= '<div class="flickr-photoset-title">' . l($title, "flickr/{$uid}/sets/{$photoset['id']}") . "</div>\n";
+
+  $output .= '<div class="flickr-photoset-count">' . \Drupal::translation()->formatPlural($photoset['photos'], '@count photo', '@count photos') . "</div>\n";
   $output .= "</div>\n";
 
   return $output;

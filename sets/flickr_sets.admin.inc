@@ -20,7 +20,7 @@ function flickr_sets_form_flickr_admin_settings_alter(&$form, &$form_state) {
   $form['photoset_settings']['flickr_sets_thumb_default_size'] = array(
     '#type' => 'select',
     '#title' => t('Size for the photo representing a set'),
-    '#default_value' => variable_get('flickr_sets_thumb_default_size', 's'),
+    '#default_value' => \Drupal::config('flickr_sets.settings')->get('flickr_sets_thumb_default_size'),
     '#options' => array(
       's' => t('s: 75 px square'),
       't' => t('t: 100 px on longest side'),
@@ -38,7 +38,7 @@ function flickr_sets_form_flickr_admin_settings_alter(&$form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Number of photosets per page'),
     '#required' => TRUE,
-    '#default_value' => variable_get('flickr_sets_per_page', 8),
+    '#default_value' => \Drupal::config('flickr_sets.settings')->get('flickr_sets_per_page'),
     '#description' => t('How many photosets display on user profile pages at <em>flickr/%uid/sets</em>. Clear the cache on form submit.'),
     '#size' => 2,
     '#maxlength' => 2,
@@ -47,7 +47,7 @@ function flickr_sets_form_flickr_admin_settings_alter(&$form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Number of photos per set'),
     '#required' => TRUE,
-    '#default_value' => variable_get('flickr_sets_photos_per_set', 6),
+    '#default_value' => \Drupal::config('flickr_sets.settings')->get('flickr_sets_photos_per_set'),
     '#description' => t('How many photos display in a set on user profile pages at <em>flickr/%uid/sets/%nsid</em>. Clear the cache on form submit.'),
     '#size' => 2,
     '#maxlength' => 2,

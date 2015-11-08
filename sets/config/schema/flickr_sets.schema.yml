@@ -1,0 +1,10 @@
+flickr_sets.settings:
+  type: mapping
+  label: Settings
+  mapping:
+    flickr_sets_per_page:
+      type: integer
+    flickr_sets_photos_per_set:
+      type: integer
+    flickr_sets_thumb_default_size:
+      type: string

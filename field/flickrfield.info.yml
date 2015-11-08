@@ -1,0 +1,11 @@
+name: 'Flickr Field'
+description: 'Add Flickr images or sets to content as fields.'
+core: 8.x
+package: Flickr
+dependencies:
+  - flickr
+  - field
+version: 7.x-1.8
+project: flickr
+datestamp: '1438860137'
+type: module
