@@ -29,7 +29,8 @@ function flickr_filter_install() {
  * Implements hook_uninstall().
  */
 function flickr_filter_uninstall() {
-  \Drupal::config('flickr_filter.settings')->clear('flickr_filter_heading')->save();
-  \Drupal::config('flickr_filter.settings')->clear('flickr_filter_default_size')->save();
-  \Drupal::config('flickr_filter.settings')->clear('flickr_filter_collapsible')->save();
+  $config = \Drupal::service('config.factory')->getEditable('flickr_filter.settings');
+  $config->clear('flickr_filter_heading')->save();
+  $config->clear('flickr_filter_default_size')->save();
+  $config->clear('flickr_filter_collapsible')->save();
 }
